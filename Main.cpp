@@ -304,27 +304,52 @@ std::string arrayToString(const char* arr) {
 namespace fs = std::filesystem;
 
 // Renames file if old_name is entire file name (excluding extension)
-void FileRenamerFull(const std::string& FilePath, const std::string& old_name, const std::string& new_name) {
+void FileRenamerFull(const std::string& FilePath, const std::string& old_name, const std::string& new_name, bool subDir) {
     fs::path target_directory = FilePath;
 
-    for (const auto& entry : fs::directory_iterator(target_directory)) {
-        if (!entry.is_regular_file()) continue; // Skip if not a regular file
+    if (!subDir)
+    {
+        for (const auto& entry : fs::directory_iterator(target_directory)) {
+            if (!entry.is_regular_file()) continue; // Skip if not a regular file
 
-        // Extract the filename without the extension
-        std::string filename_without_extension = entry.path().stem().string();
-        std::string extension = entry.path().extension().string();
+            // Extract the filename without the extension
+            std::string filename_without_extension = entry.path().stem().string();
+            std::string extension = entry.path().extension().string();
 
-        // Check if the filename matches old_name
-        if (filename_without_extension == old_name) {
-            // Construct new filename with the same extension
-            std::string new_filename = new_name + extension;
+            // Check if the filename matches old_name
+            if (filename_without_extension == old_name) {
+                // Construct new filename with the same extension
+                std::string new_filename = new_name + extension;
 
-            // Full path for the new file
-            auto new_path = entry.path().parent_path() / new_filename;
+                // Full path for the new file
+                auto new_path = entry.path().parent_path() / new_filename;
 
-            // Rename the file
-            fs::rename(entry.path(), new_path);
-            std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
+                // Rename the file
+                fs::rename(entry.path(), new_path);
+                std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
+            }
+        }
+    }
+    else if (subDir) {
+        for (const auto& entry : fs::recursive_directory_iterator(target_directory)) {
+            if (!entry.is_regular_file()) continue; // Skip if not a regular file
+
+            // Extract the filename without the extension
+            std::string filename_without_extension = entry.path().stem().string();
+            std::string extension = entry.path().extension().string();
+
+            // Check if the filename matches old_name
+            if (filename_without_extension == old_name) {
+                // Construct new filename with the same extension
+                std::string new_filename = new_name + extension;
+
+                // Full path for the new file
+                auto new_path = entry.path().parent_path() / new_filename;
+
+                // Rename the file
+                fs::rename(entry.path(), new_path);
+                std::cout << "Renamed " << entry.path() << " to " << new_path << std::endl;
+            }
         }
     }
 }
@@ -355,21 +380,37 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
     }
 }
 
+// Renames file if old_name is found in part of file name (including subdirectories)
+void FileRenamerPartialSubdir(const std::string& FilePath, const std::string& old_name, const std::string& new_name) {
+    fs::path target_directory = FilePath;
 
-std::string user_convert_1, user_convert_2, user_path, user_extension; // Strings for converting character list to string
+    for (const auto& entry : fs::recursive_directory_iterator(target_directory)) {
+        if (!entry.is_regular_file()) continue; // Skip if not a regular file
+
+        // Extract the complete filename
+        std::string filename = entry.path().filename().string();
+
+        // Find position of old_name within the filename
+        size_t pos = filename.find(old_name);
+        if (pos != std::string::npos) {
+            // Replace old_name with new_name in the filename
+            std::string new_filename = filename.substr(0, pos) + new_name + filename.substr(pos + old_name.length());
+
+            // Full path for the new file
+            auto new_path = entry.path().parent_path() / new_filename;
+
+            // Rename the file
+            fs::rename(entry.path(), new_path);
+            std::cout << "Renamed " << entry.path() << " to " << new_path << std::endl;
+        }
+    }
+}
+
+
+std::string user_convert_old, user_convert_new, user_path, user_extension; // Strings for converting character list to string
 
 void onExit() {
-    //replaceInFile("Bulk_Rename_Files_v5_subdir_folders_files.bat", ".*", "." + user_extension);
-    replaceInFile("Bulk_Rename_Files_v5_subdir_folders_files.bat", user_convert_1, "old_name");
-    replaceInFile("Bulk_Rename_Files_v5_subdir_folders_files.bat", user_convert_2, "new_name");
-    replaceInFile("Bulk_Rename_Files_v5_subdir_folders_files.bat", user_path + "\\", "");
-    std::cout << "Reverted Subdirectories batch file to original state" << std::endl;
-
-    //replaceInFile("Bulk_Rename_Files_v2_1_dot.bat", ".*", "." + user_extension);
-    replaceInFile("Bulk_Rename_Files_v2_1_dot.bat", user_convert_1, "old_name");
-    replaceInFile("Bulk_Rename_Files_v2_1_dot.bat", user_convert_2, "new_name");
-    replaceInFile("Bulk_Rename_Files_v2_1_dot.bat", user_path + "\\", "");   
-    std::cout << "Reverted Current directory batch file to original state" << std::endl;
+    std::cout << "Application Exited." << std::endl;
 }
 
 bool toggleStateNVG = false;
@@ -1071,6 +1112,11 @@ int main() {
         //Ends the frame for NanoVG and draws the content to the screen
         nvgEndFrame(vg);
 
+        user_convert_old = arrayToString(text1);
+        user_convert_new = arrayToString(text2);
+        user_path = arrayToString(text3);
+        user_extension = arrayToString(text4);
+
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
             if (isMouseOverButton2) {
                 isButtonClicked2 = true;
@@ -1078,7 +1124,12 @@ int main() {
         }
         else {
             if (isMouseOverButton2 && isButtonClicked2) {
-                FileRenamerPartial("C:/Users/callo/Desktop/test_folder", "test_old", "test_new");
+                if(CheckBoxValRef2){
+                    FileRenamerFull(user_path, user_convert_old, user_convert_new, true);
+                }
+                else if (!CheckBoxValRef2) {
+                    FileRenamerFull(user_path, user_convert_old, user_convert_new, false);
+                }
             }
         }
 
