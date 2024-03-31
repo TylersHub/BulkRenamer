@@ -356,63 +356,70 @@ void FileRenamerFull(const std::string& FilePath, const std::string& old_name, c
                 // Rename the file
                 fs::rename(entry.path(), new_path);
                 std::cout << "Renamed " << entry.path() << " to " << new_path << std::endl;
+
+                renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename; // Adds file name string to output string stream
+                displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
             }
         }
     }
 }
 
 // Renames file if old_name is found in part of file name
-void FileRenamerPartial(const std::string& FilePath, const std::string& old_name, const std::string& new_name) {
+void FileRenamerPartial(const std::string& FilePath, const std::string& old_name, const std::string& new_name, bool subDir) {
     fs::path target_directory = FilePath;
+    std::ostringstream renamedFileString;
 
-    for (const auto& entry : fs::directory_iterator(target_directory)) {
-        if (!entry.is_regular_file()) continue; // Skip if not a regular file
+    if (!subDir) {
+        for (const auto& entry : fs::directory_iterator(target_directory)) {
+            if (!entry.is_regular_file()) continue; // Skip if not a regular file
 
-        // Extract the complete filename
-        std::string filename = entry.path().filename().string();
+            // Extract the complete filename
+            std::string filename = entry.path().filename().string();
 
-        // Find position of old_name within the filename
-        size_t pos = filename.find(old_name);
-        if (pos != std::string::npos) {
-            // Replace old_name with new_name in the filename
-            std::string new_filename = filename.substr(0, pos) + new_name + filename.substr(pos + old_name.length());
+            // Find position of old_name within the filename
+            size_t pos = filename.find(old_name);
+            if (pos != std::string::npos) {
+                // Replace old_name with new_name in the filename
+                std::string new_filename = filename.substr(0, pos) + new_name + filename.substr(pos + old_name.length());
 
-            // Full path for the new file
-            auto new_path = entry.path().parent_path() / new_filename;
+                // Full path for the new file
+                auto new_path = entry.path().parent_path() / new_filename;
 
-            // Rename the file
-            fs::rename(entry.path(), new_path);
-            std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
+                // Rename the file
+                fs::rename(entry.path(), new_path);
+                std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
+
+                renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename; // Adds file name string to output string stream
+                displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
+            }
+        }
+    }
+    else if (subDir) {
+        for (const auto& entry : fs::recursive_directory_iterator(target_directory)) {
+            if (!entry.is_regular_file()) continue; // Skip if not a regular file
+
+            // Extract the complete filename
+            std::string filename = entry.path().filename().string();
+
+            // Find position of old_name within the filename
+            size_t pos = filename.find(old_name);
+            if (pos != std::string::npos) {
+                // Replace old_name with new_name in the filename
+                std::string new_filename = filename.substr(0, pos) + new_name + filename.substr(pos + old_name.length());
+
+                // Full path for the new file
+                auto new_path = entry.path().parent_path() / new_filename;
+
+                // Rename the file
+                fs::rename(entry.path(), new_path);
+                std::cout << "Renamed " << entry.path() << " to " << new_path << std::endl;
+
+                renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename; // Adds file name string to output string stream
+                displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
+            }
         }
     }
 }
-
-// Renames file if old_name is found in part of file name (including subdirectories)
-void FileRenamerPartialSubdir(const std::string& FilePath, const std::string& old_name, const std::string& new_name) {
-    fs::path target_directory = FilePath;
-
-    for (const auto& entry : fs::recursive_directory_iterator(target_directory)) {
-        if (!entry.is_regular_file()) continue; // Skip if not a regular file
-
-        // Extract the complete filename
-        std::string filename = entry.path().filename().string();
-
-        // Find position of old_name within the filename
-        size_t pos = filename.find(old_name);
-        if (pos != std::string::npos) {
-            // Replace old_name with new_name in the filename
-            std::string new_filename = filename.substr(0, pos) + new_name + filename.substr(pos + old_name.length());
-
-            // Full path for the new file
-            auto new_path = entry.path().parent_path() / new_filename;
-
-            // Rename the file
-            fs::rename(entry.path(), new_path);
-            std::cout << "Renamed " << entry.path() << " to " << new_path << std::endl;
-        }
-    }
-}
-
 
 std::string user_convert_old, user_convert_new, user_path, user_extension; // Strings for converting character list to string
 
@@ -1135,7 +1142,7 @@ int main() {
         //Text Output Box 1 (Displays Renamed Files)
 
         ImGui::SetNextWindowPos(ImVec2(170, 455));
-        ImGui::SetNextWindowSize(ImVec2(310, 150));
+        ImGui::SetNextWindowSize(ImVec2(310, 140));
         ImGui::Begin("###TextWindow", nullptr,
             ImGuiWindowFlags_NoTitleBar |
             ImGuiWindowFlags_NoResize |
@@ -1163,19 +1170,37 @@ int main() {
         user_path = arrayToString(text3);
         user_extension = arrayToString(text4);
 
-
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-            if (isMouseOverButton2) {
-                isButtonClicked2 = true;
+        if (isToggleSwitchClicked) {
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+                if (isMouseOverButton2) {
+                    isButtonClicked2 = true;
+                }
+            }
+            else {
+                if (isMouseOverButton2 && isButtonClicked2) {
+                    if (CheckBoxValRef2) {
+                        FileRenamerFull(user_path, user_convert_old, user_convert_new, true);
+                    }
+                    else if (!CheckBoxValRef2) {
+                        FileRenamerFull(user_path, user_convert_old, user_convert_new, false);
+                    }
+                }
             }
         }
-        else {
-            if (isMouseOverButton2 && isButtonClicked2) {
-                if(CheckBoxValRef2){
-                    FileRenamerFull(user_path, user_convert_old, user_convert_new, true);
+        else if(!isToggleSwitchClicked) {
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+                if (isMouseOverButton2) {
+                    isButtonClicked2 = true;
                 }
-                else if (!CheckBoxValRef2) {
-                    FileRenamerFull(user_path, user_convert_old, user_convert_new, false);
+            }
+            else {
+                if (isMouseOverButton2 && isButtonClicked2) {
+                    if (CheckBoxValRef2) {
+                        FileRenamerPartial(user_path, user_convert_old, user_convert_new, true);
+                    }
+                    else if (!CheckBoxValRef2) {
+                        FileRenamerPartial(user_path, user_convert_old, user_convert_new, false);
+                    }
                 }
             }
         }
