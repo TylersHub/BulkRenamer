@@ -391,61 +391,7 @@ std::string arrayToString(const char* arr) {
     return std::string(arr, arr + lastNonWhitespaceIndex);
 }
 
-// The file renaming functions
 
-namespace fs = std::filesystem;
-
-// Renames file if old_name is entire file name (excluding extension)
-void FileRenamerFull(const std::string& FilePath, const std::string& old_name, const std::string& new_name) {
-    fs::path target_directory = FilePath;
-
-    for (const auto& entry : fs::directory_iterator(target_directory)) {
-        if (!entry.is_regular_file()) continue; // Skip if not a regular file
-
-        // Extract the filename without the extension
-        std::string filename_without_extension = entry.path().stem().string();
-        std::string extension = entry.path().extension().string();
-
-        // Check if the filename matches old_name
-        if (filename_without_extension == old_name) {
-            // Construct new filename with the same extension
-            std::string new_filename = new_name + extension;
-
-            // Full path for the new file
-            auto new_path = entry.path().parent_path() / new_filename;
-
-            // Rename the file
-            fs::rename(entry.path(), new_path);
-            std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
-        }
-    }
-}
-
-// Renames file if old_name is found in part of file name
-void FileRenamerPartial(const std::string& FilePath, const std::string& old_name, const std::string& new_name) {
-    fs::path target_directory = FilePath;
-
-    for (const auto& entry : fs::directory_iterator(target_directory)) {
-        if (!entry.is_regular_file()) continue; // Skip if not a regular file
-
-        // Extract the complete filename
-        std::string filename = entry.path().filename().string();
-
-        // Find position of old_name within the filename
-        size_t pos = filename.find(old_name);
-        if (pos != std::string::npos) {
-            // Replace old_name with new_name in the filename
-            std::string new_filename = filename.substr(0, pos) + new_name + filename.substr(pos + old_name.length());
-
-            // Full path for the new file
-            auto new_path = entry.path().parent_path() / new_filename;
-
-            // Rename the file
-            fs::rename(entry.path(), new_path);
-            std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
-        }
-    }
-}
 
 
 std::string user_convert_1, user_convert_2, user_path, user_extension; // Strings for converting character list to string
@@ -1288,18 +1234,8 @@ int main() {
         //Ends the frame for NanoVG and draws the content to the screen
         nvgEndFrame(vg);
 
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-            if (isMouseOverButton2) {
-                isButtonClicked2 = true;
-            }
-        }
-        else {
-            if (isMouseOverButton2 && isButtonClicked2) {
-                FileRenamerPartial("C:/Users/callo/Desktop/test_folder", "test_old", "test_new");
-            }
-        }
 
-        /*if (isToggleSwitchClicked) {
+        if (isToggleSwitchClicked) {
             if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
                 if (isMouseOverButton2) {
                     isButtonClicked2 = true;
@@ -1550,7 +1486,7 @@ int main() {
                 }
                 isButtonClicked2 = false;
             }
-        }*/
+        }
 
         ImGui::PopStyleColor(); // Restore default text color
         ImGui::PopStyleColor(); // Restore default window background color
