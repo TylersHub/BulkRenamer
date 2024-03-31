@@ -303,9 +303,12 @@ std::string arrayToString(const char* arr) {
 
 namespace fs = std::filesystem;
 
+std::vector <std::string> displayFilesRenamed;
+
 // Renames file if old_name is entire file name (excluding extension)
 void FileRenamerFull(const std::string& FilePath, const std::string& old_name, const std::string& new_name, bool subDir) {
     fs::path target_directory = FilePath;
+    std::ostringstream renamedFileString;
 
     if (!subDir)
     {
@@ -326,7 +329,11 @@ void FileRenamerFull(const std::string& FilePath, const std::string& old_name, c
 
                 // Rename the file
                 fs::rename(entry.path(), new_path);
-                std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
+                std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl; // Prints file name in console
+
+                renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename; // Adds file name string to output string stream
+                displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
+
             }
         }
     }
@@ -619,7 +626,7 @@ int main() {
 
         // Checkbox 1
         {
-            ImGui::SetNextWindowPos(ImVec2(64, 320));
+            ImGui::SetNextWindowPos(ImVec2(64, 130));
             //ImGui::SetNextWindowSize(ImVec2(488, 40));
             ImGui::Begin("Check", nullptr,
                 ImGuiWindowFlags_NoTitleBar |
@@ -688,7 +695,7 @@ int main() {
 
         //Text Input Box 1
         //{
-        ImGui::SetNextWindowPos(ImVec2(200, 94));
+        ImGui::SetNextWindowPos(ImVec2(195, -6));
         ImGui::SetNextWindowSize(ImVec2(310, 40));
         ImGui::Begin(" ", nullptr,
             ImGuiWindowFlags_NoTitleBar |
@@ -711,7 +718,7 @@ int main() {
 
         //Text Input Box 2
         //{
-        ImGui::SetNextWindowPos(ImVec2(170, 218));
+        ImGui::SetNextWindowPos(ImVec2(165, 29));
         ImGui::SetNextWindowSize(ImVec2(310, 40));
         ImGui::Begin("  ", nullptr,
             ImGuiWindowFlags_NoTitleBar |
@@ -753,11 +760,11 @@ int main() {
         nvgFontSize(vg, 20.0f);
         nvgFontFaceId(vg, font); // Use the font ID instead of the name
         nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-        nvgText(vg, 20.0f, 125.0f, "Enter current name:", NULL);
+        nvgText(vg, 15.0f, 25.0f, "Enter current name:", NULL);
 
         // Draw Box 1
         nvgBeginPath(vg); //Starts a new path
-        nvgRect(vg, 210.0f, 104.0f, 200, 27); // Rectangle at position (100, 100) with width 200 and height 150
+        nvgRect(vg, 205.0f, 4.0f, 200, 27); // Rectangle at position (100, 100) with width 200 and height 150
         nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color of the rectangle
         nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
         nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
@@ -770,11 +777,11 @@ int main() {
         nvgFontSize(vg, 20.0f);
         nvgFontFaceId(vg, font); // Use the font ID instead of the name
         nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-        nvgText(vg, 20.0f, 250.0f, "Enter new name:", NULL);
+        nvgText(vg, 15.0f, 60.0f, "Enter new name:", NULL);
 
         // Draw Box 2
         nvgBeginPath(vg); //Starts a new path
-        nvgRect(vg, 180.0f, 228.0f, 200, 28); // Rectangle at position (100, 100) with width 200 and height 150
+        nvgRect(vg, 175.0f, 38.0f, 200, 28); // Rectangle at position (100, 100) with width 200 and height 150
         nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color of the rectangle
         nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
         nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
@@ -785,7 +792,7 @@ int main() {
 
         // Draw Selection Button Variables
         float button1X = 400.0f;
-        float button1Y = 450.0f;
+        float button1Y = 330.0f;
         float buttonWidth1 = 150.0f;
         float buttonHeight1 = 50.0f;
 
@@ -854,7 +861,7 @@ int main() {
         }
 
 
-        // Draw Button 1
+        // Draw Button 1 (Select a Folder)
         nvgBeginPath(vg); //Starts a new path
         nvgRect(vg, button1X, button1Y, buttonWidth1, buttonHeight1); //Draws a rectangle
         nvgFill(vg); //Fills the path with the current fill style
@@ -862,7 +869,7 @@ int main() {
         nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); //Sets the color of stroke
         nvgStroke(vg); // Makes stroke
 
-        // Draw Text on Button
+        // Draw Text on Button 1
         nvgFontSize(vg, 18.0f);
         nvgFontFaceId(vg, font); // Use the font ID instead of the name
         nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
@@ -871,7 +878,7 @@ int main() {
 
         // Draw Box 3
         nvgBeginPath(vg); //Starts a new path
-        nvgRect(vg, 72.0f, 458.0f, 320, 33); // Rectangle at position (100, 100) with width 200 and height 150
+        nvgRect(vg, 72.0f, 338.0f, 320, 33); // Rectangle at position (100, 100) with width 200 and height 150
         nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); //Color of the rectangle
         nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
         nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
@@ -880,7 +887,7 @@ int main() {
 
         //Text Input Box 3
 
-        ImGui::SetNextWindowPos(ImVec2(66, 453));
+        ImGui::SetNextWindowPos(ImVec2(66, 333));
         ImGui::SetNextWindowSize(ImVec2(488, 40));
         ImGui::Begin("   ", nullptr,
             ImGuiWindowFlags_NoTitleBar |
@@ -925,7 +932,7 @@ int main() {
         if (CheckBoxValRef1) {
             // Checkbox 2
             {
-                ImGui::SetNextWindowPos(ImVec2(64, 400));
+                ImGui::SetNextWindowPos(ImVec2(64, 210));
                 ImGui::Begin("Check2", nullptr,
                     ImGuiWindowFlags_NoTitleBar |
                     ImGuiWindowFlags_NoResize |
@@ -957,7 +964,7 @@ int main() {
 
             //Text Input Box 4
             {
-                ImGui::SetNextWindowPos(ImVec2(155, 350));
+                ImGui::SetNextWindowPos(ImVec2(155, 160));
                 ImGui::SetNextWindowSize(ImVec2(310, 40));
                 ImGui::Begin("    ", nullptr,
                     ImGuiWindowFlags_NoTitleBar |
@@ -981,11 +988,11 @@ int main() {
             nvgFontSize(vg, 20.0f);
             nvgFontFaceId(vg, font); // Use the font ID instead of the name
             nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-            nvgText(vg, 115.0f, 375.0f, "File Type:", NULL);
+            nvgText(vg, 115.0f, 185.0f, "File Type:", NULL);
 
             // Draw Box 2
             nvgBeginPath(vg); //Starts a new path
-            nvgRect(vg, 165.0f, 360.0f, 200, 28); // Rectangle at position (100, 100) with width 200 and height 150
+            nvgRect(vg, 165.0f, 170.0f, 200, 28); // Rectangle at position (100, 100) with width 200 and height 150
             nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color of the rectangle
             nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
             nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
@@ -995,7 +1002,7 @@ int main() {
         else {
             // Checkbox 2
             {
-                ImGui::SetNextWindowPos(ImVec2(64, 380));
+                ImGui::SetNextWindowPos(ImVec2(64, 190));
                 ImGui::Begin("Check2", nullptr,
                     ImGuiWindowFlags_NoTitleBar |
                     ImGuiWindowFlags_NoResize |
@@ -1030,7 +1037,7 @@ int main() {
 
         // Draw Rename Button Variables
         float button2X = 225.0f;
-        float button2Y = 525.0f;
+        float button2Y = 405.0f;
         float buttonWidth2 = 125.0f;
         float buttonHeight2 = 50.0f;
 
@@ -1055,7 +1062,7 @@ int main() {
         }
 
 
-        // Draw Button 2
+        // Draw Button 2 (Rename)
         nvgBeginPath(vg); //Starts a new path
         nvgRect(vg, button2X, button2Y, buttonWidth2, buttonHeight2); //Draws a rectangle
         nvgFill(vg); //Fills the path with the current fill style
@@ -1072,19 +1079,19 @@ int main() {
 
 
         // Draw toggle switch using NanoVG
-        DrawNanoVGToggleSwitch(vg, 70, 270, 60, 30);
+        DrawNanoVGToggleSwitch(vg, 70, 80, 60, 30);
 
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
 
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-            if (xpos >= 70 && xpos <= 70 + 60 && ypos >= 270 && ypos <= 270 + 30) {
+            if (xpos >= 70 && xpos <= 70 + 60 && ypos >= 80 && ypos <= 80 + 30) {
                 isToggleSwitchClicked = true;
             }
         }
         else {
             // Check if the click is within the toggle switch area
-            if ((xpos >= 70 && xpos <= 70 + 60 && ypos >= 275 && ypos <= 270 + 30) && isToggleSwitchClicked) {
+            if ((xpos >= 70 && xpos <= 70 + 60 && ypos >= 80 && ypos <= 80 + 30) && isToggleSwitchClicked) {
                 toggleStateNVG = !toggleStateNVG; // Toggle the state
             }
             isToggleSwitchClicked = false;
@@ -1097,7 +1104,7 @@ int main() {
             nvgFontSize(vg, 20.0f);
             nvgFontFaceId(vg, font); // Use the font ID instead of the name
             nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-            nvgText(vg, 200.0f, 285.0f, "Entire Name", NULL);
+            nvgText(vg, 200.0f, 95.0f, "Entire Name", NULL);
         }
         else {
             // Draw text (toggle switch)
@@ -1105,9 +1112,48 @@ int main() {
             nvgFontSize(vg, 20.0f);
             nvgFontFaceId(vg, font); // Use the font ID instead of the name
             nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-            nvgText(vg, 200.0f, 285.0f, "Part of Name", NULL);
+            nvgText(vg, 200.0f, 95.0f, "Part of Name", NULL);
         }
 
+
+        // Draw text (Files Renamed)
+        nvgBeginPath(vg); //Starts a new path
+        nvgFontSize(vg, 20.0f);
+        nvgFontFaceId(vg, font); // Use the font ID instead of the name
+        nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
+        nvgText(vg, 90.0f, 470.0f, "Files Renamed:", NULL);
+
+        // Draw Output Box 1
+        nvgBeginPath(vg); //Starts a new path
+        nvgRect(vg, 175.0f, 460.0f, 300, 130); // Rectangle at position (100, 100) with width 200 and height 150
+        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color of the rectangle
+        nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
+        nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
+        nvgFill(vg); // Fill the path
+        nvgStroke(vg); // Draw the stroke
+
+        //Text Output Box 1 (Displays Renamed Files)
+
+        ImGui::SetNextWindowPos(ImVec2(170, 455));
+        ImGui::SetNextWindowSize(ImVec2(310, 150));
+        ImGui::Begin("###TextWindow", nullptr,
+            ImGuiWindowFlags_NoTitleBar |
+            ImGuiWindowFlags_NoResize |
+            ImGuiWindowFlags_NoMove |
+            //ImGuiWindowFlags_NoScrollbar |
+            //ImGuiWindowFlags_NoScrollWithMouse |
+            ImGuiWindowFlags_NoCollapse |
+            ImGuiWindowFlags_NoSavedSettings |
+            ImGuiWindowFlags_NoBackground
+        );
+
+        // Create a text output box
+        for (const auto& renamedFile : displayFilesRenamed){
+            ImGui::TextWrapped("%s", renamedFile.c_str());
+            }
+
+        ImGui::End(); //End of Text Output box 1
+         
 
         //Ends the frame for NanoVG and draws the content to the screen
         nvgEndFrame(vg);
@@ -1116,6 +1162,7 @@ int main() {
         user_convert_new = arrayToString(text2);
         user_path = arrayToString(text3);
         user_extension = arrayToString(text4);
+
 
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
             if (isMouseOverButton2) {
