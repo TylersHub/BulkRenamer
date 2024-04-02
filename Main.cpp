@@ -496,7 +496,7 @@ int main() {
     glfwWindowHint(GLFW_SAMPLES, 0);
 
     // Load the dialog icon (in window)
-    HICON hIcon = (HICON)LoadImage(NULL, TEXT("BulkRenamer_logo_alt_Icon.ico"), IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED);
+   HICON hIcon = (HICON)LoadImage(NULL, TEXT("New_BulkRenamer_Logo.ico"), IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED);
 
     if (hIcon)
     {
@@ -795,7 +795,7 @@ int main() {
 
         // Draw Selection Button Variables
         float button1X = 400.0f;
-        float button1Y = 330.0f;
+        float button1Y = 280.0f;
         float buttonWidth1 = 150.0f;
         float buttonHeight1 = 50.0f;
 
@@ -881,7 +881,7 @@ int main() {
 
         // Draw Box 3
         nvgBeginPath(vg); //Starts a new path
-        nvgRect(vg, 72.0f, 338.0f, 320, 33); // Rectangle at position (100, 100) with width 200 and height 150
+        nvgRect(vg, 72.0f, 288.0f, 320, 33); // Rectangle at position (100, 100) with width 200 and height 150
         nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); //Color of the rectangle
         nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
         nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
@@ -890,7 +890,7 @@ int main() {
 
         //Text Input Box 3
 
-        ImGui::SetNextWindowPos(ImVec2(66, 333));
+        ImGui::SetNextWindowPos(ImVec2(66, 283));
         ImGui::SetNextWindowSize(ImVec2(488, 40));
         ImGui::Begin("   ", nullptr,
             ImGuiWindowFlags_NoTitleBar |
@@ -1040,7 +1040,7 @@ int main() {
 
         // Draw Rename Button Variables
         float button2X = 225.0f;
-        float button2Y = 405.0f;
+        float button2Y = 355.0f;
         float buttonWidth2 = 125.0f;
         float buttonHeight2 = 50.0f;
 

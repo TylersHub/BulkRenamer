@@ -95,7 +95,7 @@
       <AdditionalManifestDependencies>%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)BulkRenamer_logo_alt_Icon.ico" "$(TargetDir)"
+      <Command>copy "$(ProjectDir)New_BulkRenamer_Logo.ico" "$(TargetDir)"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -132,7 +132,7 @@
       <AdditionalManifestDependencies>%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)BulkRenamer_logo_alt_Icon.ico" "$(TargetDir)"
+      <Command>copy "$(ProjectDir)New_BulkRenamer_Logo.ico" "$(TargetDir)"
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -184,19 +184,14 @@
     <Font Include="trebuc.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="BulkRenamer_logo_alt_Icon.ico" />
     <Image Include="BulkRenamer_logo_background.png" />
+    <Image Include="New_BulkRenamer_Logo.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BulkRenamerProject.rc" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="test.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Bulk_Rename_Files_Full_and_Part_of_name.bat" />
-    <None Include="Bulk_Rename_Files_v2_1_dot.bat" />
-    <None Include="Bulk_Rename_Files_v5_subdir_folders_files.bat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
