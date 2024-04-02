@@ -389,7 +389,7 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
                 fs::rename(entry.path(), new_path);
                 std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
 
-                renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename; // Adds file name string to output string stream
+                renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename << "\n"; // Adds file name string to output string stream
                 displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
             }
         }
@@ -414,7 +414,7 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
                 fs::rename(entry.path(), new_path);
                 std::cout << "Renamed " << entry.path() << " to " << new_path << std::endl;
 
-                renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename; // Adds file name string to output string stream
+                renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename << "\n"; // Adds file name string to output string stream
                 displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
             }
         }
@@ -566,11 +566,6 @@ int main() {
     std::cout << " " << imageWidth << " " << imageHeight << "\n";
     //unsigned char* image = stbi_load("BulkRenamer_Logo.png", &imageWidth, &imageHeight, &imageChannels, 0);
 
-    /*if (!image) {
-        fprintf(stderr, "Failed to load image\n");
-        return -1;
-    }*/
-
     if (imageHandle == 0) {
         fprintf(stderr, "Failed to load image\n");
         return -1;
@@ -601,6 +596,7 @@ int main() {
     //io.FontGlobalScale = 1.0f; // Change this value to adjust global font size
     ImFont* ImGui_font_normal = io.Fonts->AddFontFromFileTTF("trebuc.ttf", 24.0f); // Load the font file with a font size of x points
     ImFont* ImGui_font_small = io.Fonts->AddFontFromFileTTF("trebuc.ttf", 20.0f); // Load the font file with a font size thats smaller
+    ImFont* ImGui_font_extra_small = io.Fonts->AddFontFromFileTTF("trebuc.ttf", 16.0f);
 
     // Set the font as the default font for ImGui
     io.FontDefault = ImGui_font_normal;
@@ -1141,8 +1137,8 @@ int main() {
 
         //Text Output Box 1 (Displays Renamed Files)
 
-        ImGui::SetNextWindowPos(ImVec2(170, 455));
-        ImGui::SetNextWindowSize(ImVec2(310, 140));
+        ImGui::SetNextWindowPos(ImVec2(170, 458));
+        ImGui::SetNextWindowSize(ImVec2(310, 134));
         ImGui::Begin("###TextWindow", nullptr,
             ImGuiWindowFlags_NoTitleBar |
             ImGuiWindowFlags_NoResize |
@@ -1154,10 +1150,14 @@ int main() {
             ImGuiWindowFlags_NoBackground
         );
 
+        ImGui::PushFont(ImGui_font_extra_small); // Add font size to text
+
         // Create a text output box
         for (const auto& renamedFile : displayFilesRenamed){
             ImGui::TextWrapped("%s", renamedFile.c_str());
             }
+
+        ImGui::PopFont(); // Remove font size after text rendered
 
         ImGui::End(); //End of Text Output box 1
          
