@@ -102,11 +102,11 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="BulkRenamer_logo_background.png">
-      <Filter>Source Files</Filter>
-    </Image>
     <Image Include="New_BulkRenamer_Logo.ico">
       <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="New_BulkRenamer_Logo_Background.png">
+      <Filter>Source Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>

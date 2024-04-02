@@ -184,8 +184,8 @@
     <Font Include="trebuc.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="BulkRenamer_logo_background.png" />
     <Image Include="New_BulkRenamer_Logo.ico" />
+    <Image Include="New_BulkRenamer_Logo_Background.png" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BulkRenamerProject.rc" />

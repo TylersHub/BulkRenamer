@@ -427,14 +427,27 @@ void onExit() {
     std::cout << "Application Exited." << std::endl;
 }
 
-bool toggleStateNVG = false;
+bool toggleStateNVG = false; // Toggle variable for toggle switch
+double xpos, ypos; // Mouse position for toggle switch
+
 // Draws Toggle Switch
 void DrawNanoVGToggleSwitch(NVGcontext* vg, float x, float y, float width, float height) {
+
+    if (xpos >= 70 && xpos <= 70 + 60 && ypos >= 80 && ypos <= 80 + 30) {
+        // Toggle Switch is hovered
+        nvgFillColor(vg, nvgRGBA(200, 200, 200, 255));
+    }
+    else {
+        // Default Toggle Switch color
+        nvgFillColor(vg, nvgRGBA(150, 150, 150, 255));
+    }
     // Draw background of Toggle Switch
     nvgBeginPath(vg);
     nvgRoundedRect(vg, x, y, width, height, height * 0.5f);
-    nvgFillColor(vg, nvgRGBA(128, 128, 128, 255));
     nvgFill(vg);
+    nvgStrokeWidth(vg, 1.0f); //Sets line width of stroke
+    nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); //Sets the color of stroke
+    nvgStroke(vg); // Makes stroke
 
     // Draw handle of Toggle Switch
     float handleX = x + (toggleStateNVG ? width - height : 0);
@@ -550,7 +563,7 @@ int main() {
     glfwSetWindowSizeLimits(window, 600, 600, 600, 600); //Sets the minimum and maximum size of the window to 600x600
 
     // Load Image
-    int imageHandle = nvgCreateImage(vg, "BulkRenamer_logo_background.png", 0);
+    int imageHandle = nvgCreateImage(vg, "New_BulkRenamer_Logo_Background.png", 0);
 
     // Set texture filtering parameters
     //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -571,8 +584,8 @@ int main() {
         return -1;
     }
 
-    float newWidth = 0.7f * static_cast<float>(imageWidth);
-    float newHeight = 0.7f * static_cast<float>(imageHeight);
+    float newWidth = 1.5f * static_cast<float>(imageWidth);
+    float newHeight = 1.5f * static_cast<float>(imageHeight);
 
     float imageX = (600 - newWidth) * 0.5f;
     float imageY = (600 - newHeight) * 0.5f;
@@ -850,7 +863,7 @@ int main() {
         std::string displayedFile = selectedFile.c_str();  // Display only the first x amount of characters
 
         // Update button color based on state
-        if (fileSelected) {
+        if (isButtonClicked) {
             // Button is inactive when a file is already selected
             nvgFillColor(vg, nvgRGBA(150, 150, 150, 255));
         }
@@ -1051,8 +1064,8 @@ int main() {
 
 
         // Update button color based on state
-        if (fileSelected) {
-            // Button is inactive when a file is already selected
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+            // Button color when button is pressed
             nvgFillColor(vg, nvgRGBA(0, 150, 0, 255));
         }
         else if (isMouseOverButton2) {
@@ -1084,7 +1097,6 @@ int main() {
         // Draw toggle switch using NanoVG
         DrawNanoVGToggleSwitch(vg, 70, 80, 60, 30);
 
-        double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
 
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
