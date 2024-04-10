@@ -1252,40 +1252,23 @@ int main() {
         user_path = arrayToString(text3);
         user_extension = arrayToString(text4);
 
-        if (isToggleSwitchClicked) {
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-                if (isMouseOverButton2) {
-                    isButtonClicked2 = true;
-                }
-            }
-            else {
-                if (isMouseOverButton2 && isButtonClicked2) {
-                    if (CheckBoxValRef2) {
-                        FileRenamerFull(user_path, user_convert_old, user_convert_new, true);
-                    }
-                    else if (!CheckBoxValRef2) {
-                        FileRenamerFull(user_path, user_convert_old, user_convert_new, false);
-                    }
-                }
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+            if (isMouseOverButton2) {
+                isButtonClicked2 = true;
             }
         }
-        else if(!isToggleSwitchClicked) {
-            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-                if (isMouseOverButton2) {
-                    isButtonClicked2 = true;
+        else {
+            if (isMouseOverButton2 && isButtonClicked2) {
+                if (toggleStateNVG) {
+                    FileRenamerFull(user_path, user_convert_old, user_convert_new, CheckBoxValRef2);
+                }
+                else {
+                    FileRenamerPartial(user_path, user_convert_old, user_convert_new, CheckBoxValRef2);
                 }
             }
-            else {
-                if (isMouseOverButton2 && isButtonClicked2) {
-                    if (CheckBoxValRef2) {
-                        FileRenamerPartial(user_path, user_convert_old, user_convert_new, true);
-                    }
-                    else if (!CheckBoxValRef2) {
-                        FileRenamerPartial(user_path, user_convert_old, user_convert_new, false);
-                    }
-                }
-            }
+            isButtonClicked2 = false;
         }
+
 
         
         ImGui::PopStyleColor(); // Restore default text color
