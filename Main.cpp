@@ -433,7 +433,7 @@ double xpos, ypos; // Mouse position for toggle switch
 // Draws Toggle Switch
 void DrawNanoVGToggleSwitch(NVGcontext* vg, float x, float y, float width, float height) {
 
-    if (xpos >= 70 && xpos <= 70 + 60 && ypos >= 80 && ypos <= 80 + 30) {
+    if (xpos >= x && xpos <= x + width && ypos >= y && ypos <= y + height) {
         // Toggle Switch is hovered
         nvgFillColor(vg, nvgRGBA(200, 200, 200, 255));
     }
@@ -642,7 +642,7 @@ int main() {
 
         // Checkbox 1
         {
-            ImGui::SetNextWindowPos(ImVec2(64, 130));
+            ImGui::SetNextWindowPos(ImVec2(15, 110));
             //ImGui::SetNextWindowSize(ImVec2(488, 40));
             ImGui::Begin("Check", nullptr,
                 ImGuiWindowFlags_NoTitleBar |
@@ -944,11 +944,14 @@ int main() {
         // Textbox 4 Variable for Checkbox 2
         static char text4[32] = "";
 
+        static bool checkboxValue3 = false;
+        bool& CheckBoxValRef3 = checkboxValue3; // Reference to the checkbox value
+
         //If statement to move Checkbox 2 (Subdirectories) if File extension directory is enabled
         if (CheckBoxValRef1) {
             // Checkbox 2
             {
-                ImGui::SetNextWindowPos(ImVec2(64, 210));
+                ImGui::SetNextWindowPos(ImVec2(15, 170));
                 ImGui::Begin("Check2", nullptr,
                     ImGuiWindowFlags_NoTitleBar |
                     ImGuiWindowFlags_NoResize |
@@ -978,9 +981,43 @@ int main() {
 
             ImGui::End(); //End of Checkbox 2
 
+            // Checkbox 3 (Rename Folders)
+
+            {
+                ImGui::SetNextWindowPos(ImVec2(15, 210));
+                ImGui::Begin("Check3", nullptr,
+                    ImGuiWindowFlags_NoTitleBar |
+                    ImGuiWindowFlags_NoResize |
+                    ImGuiWindowFlags_NoMove |
+                    ImGuiWindowFlags_NoScrollbar |
+                    ImGuiWindowFlags_NoScrollWithMouse |
+                    ImGuiWindowFlags_NoCollapse |
+                    ImGuiWindowFlags_NoSavedSettings |
+                    ImGuiWindowFlags_NoBackground
+                );
+
+                // Draw a border around the checkbox
+                ImDrawList* drawList = ImGui::GetWindowDrawList();
+                ImVec2 checkboxPos = ImGui::GetCursorScreenPos();
+                ImVec2 checkboxSize = ImVec2(ImGui::GetFontSize(), ImGui::GetFontSize());
+                ImVec2 minBound = ImVec2(checkboxPos.x - 1, checkboxPos.y - 1);
+                ImVec2 maxBound = ImVec2(checkboxPos.x + checkboxSize.x + 6, checkboxPos.y + checkboxSize.y + 6);
+                ImU32 fillColor = IM_COL32(255, 255, 255, 255); // Fill Color
+                drawList->AddRectFilled(minBound, maxBound, fillColor);
+                drawList->AddRect(minBound, maxBound, IM_COL32(0, 0, 0, 255)); // Black border
+            }
+
+
+            // Create a checkbox 3
+            //static bool checkboxValue3 = false;
+            //bool& CheckBoxValRef3 = checkboxValue3; // Reference to the checkbox value
+            ImGui::Checkbox("Rename Folders", &CheckBoxValRef3); // ##checkbox is an empty identifier to avoid label text
+
+            ImGui::End(); //End of Checkbox 3
+
             //Text Input Box 4
             {
-                ImGui::SetNextWindowPos(ImVec2(155, 160));
+                ImGui::SetNextWindowPos(ImVec2(110, 141));
                 ImGui::SetNextWindowSize(ImVec2(310, 40));
                 ImGui::Begin("    ", nullptr,
                     ImGuiWindowFlags_NoTitleBar |
@@ -1004,11 +1041,11 @@ int main() {
             nvgFontSize(vg, 20.0f);
             nvgFontFaceId(vg, font); // Use the font ID instead of the name
             nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-            nvgText(vg, 115.0f, 185.0f, "File Type:", NULL);
+            nvgText(vg, 70.0f, 162.0f, "File Type:", NULL);
 
             // Draw Box 2
             nvgBeginPath(vg); //Starts a new path
-            nvgRect(vg, 165.0f, 170.0f, 200, 28); // Rectangle at position (100, 100) with width 200 and height 150
+            nvgRect(vg, 120.0f, 150.0f, 100, 28); // Rectangle at position (100, 100) with width 200 and height 150
             nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color of the rectangle
             nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
             nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
@@ -1018,7 +1055,7 @@ int main() {
         else {
             // Checkbox 2
             {
-                ImGui::SetNextWindowPos(ImVec2(64, 190));
+                ImGui::SetNextWindowPos(ImVec2(15, 150));
                 ImGui::Begin("Check2", nullptr,
                     ImGuiWindowFlags_NoTitleBar |
                     ImGuiWindowFlags_NoResize |
@@ -1047,8 +1084,41 @@ int main() {
             ImGui::Checkbox("Subdirectories", &CheckBoxValRef2); // ##checkbox is an empty identifier to avoid label text
 
             ImGui::End(); //End of Checkbox 2
-        }
 
+            // Checkbox 3 (Rename Folders)
+
+            {
+                ImGui::SetNextWindowPos(ImVec2(15, 190));
+                ImGui::Begin("Check3", nullptr,
+                    ImGuiWindowFlags_NoTitleBar |
+                    ImGuiWindowFlags_NoResize |
+                    ImGuiWindowFlags_NoMove |
+                    ImGuiWindowFlags_NoScrollbar |
+                    ImGuiWindowFlags_NoScrollWithMouse |
+                    ImGuiWindowFlags_NoCollapse |
+                    ImGuiWindowFlags_NoSavedSettings |
+                    ImGuiWindowFlags_NoBackground
+                );
+
+                // Draw a border around the checkbox
+                ImDrawList* drawList = ImGui::GetWindowDrawList();
+                ImVec2 checkboxPos = ImGui::GetCursorScreenPos();
+                ImVec2 checkboxSize = ImVec2(ImGui::GetFontSize(), ImGui::GetFontSize());
+                ImVec2 minBound = ImVec2(checkboxPos.x - 1, checkboxPos.y - 1);
+                ImVec2 maxBound = ImVec2(checkboxPos.x + checkboxSize.x + 6, checkboxPos.y + checkboxSize.y + 6);
+                ImU32 fillColor = IM_COL32(255, 255, 255, 255); // Fill Color
+                drawList->AddRectFilled(minBound, maxBound, fillColor);
+                drawList->AddRect(minBound, maxBound, IM_COL32(0, 0, 0, 255)); // Black border
+            }
+
+
+            // Create a checkbox 3
+            //static bool checkboxValue3 = false;
+            //bool& CheckBoxValRef3 = checkboxValue3; // Reference to the checkbox value
+            ImGui::Checkbox("Rename Folders", &CheckBoxValRef3); // ##checkbox is an empty identifier to avoid label text
+
+            ImGui::End(); //End of Checkbox 3
+        }
 
 
         // Draw Rename Button Variables
@@ -1095,18 +1165,18 @@ int main() {
 
 
         // Draw toggle switch using NanoVG
-        DrawNanoVGToggleSwitch(vg, 70, 80, 60, 30);
+        DrawNanoVGToggleSwitch(vg, 21, 80, 60, 30);
 
         glfwGetCursorPos(window, &xpos, &ypos);
 
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-            if (xpos >= 70 && xpos <= 70 + 60 && ypos >= 80 && ypos <= 80 + 30) {
+            if (xpos >= 21 && xpos <= 21 + 60 && ypos >= 80 && ypos <= 80 + 30) {
                 isToggleSwitchClicked = true;
             }
         }
         else {
             // Check if the click is within the toggle switch area
-            if ((xpos >= 70 && xpos <= 70 + 60 && ypos >= 80 && ypos <= 80 + 30) && isToggleSwitchClicked) {
+            if ((xpos >= 21 && xpos <= 21 + 60 && ypos >= 80 && ypos <= 80 + 30) && isToggleSwitchClicked) {
                 toggleStateNVG = !toggleStateNVG; // Toggle the state
             }
             isToggleSwitchClicked = false;
@@ -1119,7 +1189,7 @@ int main() {
             nvgFontSize(vg, 20.0f);
             nvgFontFaceId(vg, font); // Use the font ID instead of the name
             nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-            nvgText(vg, 200.0f, 95.0f, "Entire Name", NULL);
+            nvgText(vg, 150.0f, 95.0f, "Entire Name", NULL);
         }
         else {
             // Draw text (toggle switch)
@@ -1127,7 +1197,7 @@ int main() {
             nvgFontSize(vg, 20.0f);
             nvgFontFaceId(vg, font); // Use the font ID instead of the name
             nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-            nvgText(vg, 200.0f, 95.0f, "Part of Name", NULL);
+            nvgText(vg, 150.0f, 95.0f, "Part of Name", NULL);
         }
 
 
