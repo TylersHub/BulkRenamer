@@ -177,6 +177,7 @@
     <ClInclude Include="..\..\..\Desktop\CODING\C++\OpenGL\imgui\imstb_truetype.h" />
     <ClInclude Include="..\..\..\Desktop\CODING\C++\OpenGL\tinyfiledialogs-current\tinyfiledialogs\tinyfiledialogs.h" />
     <ClInclude Include="..\..\..\Downloads\stb_image.h" />
+    <ClInclude Include="Main_Functions.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
