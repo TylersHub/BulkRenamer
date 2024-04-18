@@ -179,6 +179,7 @@
     <ClInclude Include="..\..\..\Downloads\stb_image.h" />
     <ClInclude Include="Main_Functions.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Shaders.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="calibri-regular.ttf" />
