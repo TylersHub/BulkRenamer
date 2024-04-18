@@ -190,9 +190,6 @@
   <ItemGroup>
     <ResourceCompile Include="BulkRenamerProject.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="test.txt" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

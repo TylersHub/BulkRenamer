@@ -1,8 +1,6 @@
-//#include <GL/glut.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-//#include <regex> //For strings
 #include <string>
 #include <vector>
 #define GLAD_APIENTRY APIENTRY
@@ -16,7 +14,6 @@
 #include <nanovg.h>
 #define NANOVG_GL3_IMPLEMENTATION
 #include <nanovg_gl.h>
-//#include <nanovg_stb_image.h>
 #include <stb_image.h>
 #include "tinyfiledialogs.h"
 #include <windows.h>
@@ -639,14 +636,6 @@ int main() {
         return -1;
     }
 
-
-    // Initialize FreeType and shaders
-    //initFreeType();
-    //initShaders();
-
-    // Set character callback to handle text input
-    //glfwSetCharCallback(window, charCallback);
-
     // 0x antialiasing
     glfwWindowHint(GLFW_SAMPLES, 0);
 
@@ -688,8 +677,6 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    //glfwSetMouseButtonCallback(window, MouseButtonCallbackToggleSwitch);
-
     // NanoVG initialization
     NVGcontext* vg = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
 
@@ -706,16 +693,6 @@ int main() {
 
     // Load Image
     int imageHandle = nvgCreateImage(vg, "New_BulkRenamer_Logo_Background.png", 0);
-
-    // Set texture filtering parameters
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // Set texture filtering parameters
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-
     int imageWidth, imageHeight;
     nvgImageSize(vg, imageHandle, &imageWidth, &imageHeight);
     std::cout << " " << imageWidth << " " << imageHeight << "\n";
@@ -815,41 +792,6 @@ int main() {
 
             ImGui::End(); //End of Checkbox 1
      
-        
-        /*
-        // Checkbox 2
-        {
-            ImGui::SetNextWindowPos(ImVec2(100, 360));
-            ImGui::Begin("Check2", nullptr,
-                ImGuiWindowFlags_NoTitleBar |
-                ImGuiWindowFlags_NoResize |
-                ImGuiWindowFlags_NoMove |
-                ImGuiWindowFlags_NoScrollbar |
-                ImGuiWindowFlags_NoScrollWithMouse |
-                ImGuiWindowFlags_NoCollapse |
-                ImGuiWindowFlags_NoSavedSettings |
-                ImGuiWindowFlags_NoBackground
-            );
-
-            // Draw a border around the checkbox
-            ImDrawList* drawList = ImGui::GetWindowDrawList();
-            ImVec2 checkboxPos = ImGui::GetCursorScreenPos();
-            ImVec2 checkboxSize = ImVec2(ImGui::GetFontSize(), ImGui::GetFontSize());
-            ImVec2 minBound = ImVec2(checkboxPos.x - 1, checkboxPos.y - 1);
-            ImVec2 maxBound = ImVec2(checkboxPos.x + checkboxSize.x + 6, checkboxPos.y + checkboxSize.y + 6);
-            ImU32 fillColor = IM_COL32(255, 255, 255, 255); // Fill Color
-            drawList->AddRectFilled(minBound, maxBound, fillColor);
-            drawList->AddRect(minBound, maxBound, IM_COL32(0, 0, 0, 255)); // Black border
-        }
-
-            // Create a checkbox 2
-            static bool checkboxValue2 = false;
-            bool& CheckBoxValRef2 = checkboxValue2; // Reference to the checkbox value
-            ImGui::Checkbox("Subdirectories", &CheckBoxValRef2); // ##checkbox is an empty identifier to avoid label text
-
-            ImGui::End(); //End of Checkbox 2
-            */
-
 
         //Text Input Box 1
         //{
@@ -968,27 +910,6 @@ int main() {
         }
         else {
             if (isMouseOverButton && isButtonClicked) {
-                // Open the file dialog when the button is clicked (non-blocking)
-                /*if (toggleStateNVG) {
-                    std::string file = openFileDialog();
-
-                    if (!file.empty()) {
-                        selectedFile = file;
-                        fileSelected = true;
-                        fileSelectedText = true;
-                        printf("Selected file: %s\n", selectedFile.c_str());
-                    }
-                }
-                else {
-                    std::string file = openFolderDialog();
-
-                    if (!file.empty()) {
-                        selectedFile = file;
-                        fileSelected = true;
-                        fileSelectedText = true;
-                        printf("Selected file: %s\n", selectedFile.c_str());
-                    }
-                }*/
 
                 std::string file = openFolderDialog();
 
@@ -1071,7 +992,6 @@ int main() {
                 text3[i] = displayedFile[i];
             }
 
-            //ImGui::TextColored(ImVec4(0.0f, 0.0f, 0.0f, 1.0f), "%s", displayedFile.c_str());
         }
 
         ImGui::PopFont();
@@ -1436,13 +1356,6 @@ int main() {
         glfwSwapBuffers(window);
         //Handles the events like keyboard, mouse, etc.
         glfwPollEvents();
-
-        // Draw user text input
-        /*nvgBeginPath(vg);
-        nvgFontSize(vg, 20.0f);
-        nvgFontFaceId(vg, font);
-        nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-        nvgText(vg, 20.0f, 200.0f, userText.c_str(), NULL);*/
 
     }
 
