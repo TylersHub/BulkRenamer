@@ -3,6 +3,35 @@
 
 int main() {
 
+    //==========
+    // Variables
+    //==========
+
+    // Variables for Background Image
+    int imageWidth, imageHeight;
+    float newWidth = 1.5f * static_cast<float>(imageWidth);
+    float newHeight = 1.5f * static_cast<float>(imageHeight);
+    float imageX = (600 - newWidth) * 0.5f;
+    float imageY = (600 - newHeight) * 0.5f;
+
+    // Variables for File Selection
+    bool fileSelected = false;
+    bool fileSelectedText = false;
+    std::string selectedFile;
+
+    // Variables for Mouse and Button Clicks
+    bool isMouseOverButton = false;
+    bool isButtonClicked = false;
+    bool isMouseOverButton2 = false;
+    bool isButtonClicked2 = false;
+    bool isToggleSwitchClicked = false;
+
+
+
+    //===============
+    // Error Checking
+    //===============
+
     if (FT_Init_FreeType(&ft)) {
         fprintf(stderr, "Failed to initialize FreeType\n");
         return -1;
@@ -24,13 +53,15 @@ int main() {
     // Set GLFW error callback
     glfwSetErrorCallback(errorCallback);
 
+
+
+    //======================================================
+    // Setting up GLFW, ImGui, NanoVG, Font, and Main Window
+    //======================================================
+
     // Set OpenGL version to 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-
-    // Enable high-DPI awareness, adjust DPI to monitor resulution
-    //glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-
 
     // Creat GLFW Window
     GLFWwindow* window = glfwCreateWindow(600, 600, "BulkRenamer", NULL, NULL);
@@ -74,7 +105,6 @@ int main() {
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
 
-
     // Setup Platform/Renderer bindings
     const char* glsl_version = "#version 130";
     ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -96,35 +126,13 @@ int main() {
 
     // Load Image
     int imageHandle = nvgCreateImage(vg, "New_BulkRenamer_Logo_Background.png", 0);
-    int imageWidth, imageHeight;
     nvgImageSize(vg, imageHandle, &imageWidth, &imageHeight);
     std::cout << " " << imageWidth << " " << imageHeight << "\n";
-    //unsigned char* image = stbi_load("BulkRenamer_Logo.png", &imageWidth, &imageHeight, &imageChannels, 0);
 
     if (imageHandle == 0) {
         fprintf(stderr, "Failed to load image\n");
         return -1;
     }
-
-    float newWidth = 1.5f * static_cast<float>(imageWidth);
-    float newHeight = 1.5f * static_cast<float>(imageHeight);
-
-    float imageX = (600 - newWidth) * 0.5f;
-    float imageY = (600 - newHeight) * 0.5f;
-
-    bool fileSelected = false; // flag to check if a file is selected
-    bool fileSelectedText = false; // flag to check if a file is selected for text
-    std::string selectedFile; // stores the path of the selected file
-
-    bool isMouseOverButton = false;
-    bool isButtonClicked = false;
-
-    bool isMouseOverButton2 = false;
-    bool isButtonClicked2 = false;
-
-    bool isToggleSwitchClicked = false;
-
-    //std::string str1, str2; // Strings for converting character list to string
 
     std::cout << " " << newWidth << " " << newHeight << "\n";
 
@@ -137,7 +145,11 @@ int main() {
     io.FontDefault = ImGui_font_normal;
 
 
+
+    //==========
     // Main Loop
+    //==========
+
     while (!glfwWindowShouldClose(window)) {
 
 
@@ -758,6 +770,8 @@ int main() {
         glfwPollEvents();
 
     }
+
+
 
     //========
     // Cleanup
