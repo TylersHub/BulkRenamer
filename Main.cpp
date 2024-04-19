@@ -9,10 +9,6 @@ int main() {
 
     // Variables for Background Image
     int imageWidth, imageHeight;
-    float newWidth = 1.5f * static_cast<float>(imageWidth);
-    float newHeight = 1.5f * static_cast<float>(imageHeight);
-    float imageX = (600 - newWidth) * 0.5f;
-    float imageY = (600 - newHeight) * 0.5f;
 
     // Variables for File Selection
     bool fileSelected = false;
@@ -127,6 +123,10 @@ int main() {
     // Load Image
     int imageHandle = nvgCreateImage(vg, "New_BulkRenamer_Logo_Background.png", 0);
     nvgImageSize(vg, imageHandle, &imageWidth, &imageHeight);
+    float newWidth = 1.5f * static_cast<float>(imageWidth);
+    float newHeight = 1.5f * static_cast<float>(imageHeight);
+    float imageX = (600 - newWidth) * 0.5f;
+    float imageY = (600 - newHeight) * 0.5f;
     std::cout << " " << imageWidth << " " << imageHeight << "\n";
 
     if (imageHandle == 0) {
