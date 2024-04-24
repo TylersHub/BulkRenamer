@@ -152,6 +152,43 @@ int main() {
 
     while (!glfwWindowShouldClose(window)) {
 
+        //====================
+        // Main Loop Variables
+        //====================
+
+        // Checkbox Variables
+        static bool checkboxValue1 = false; // For File Extension
+        bool& CheckBoxValRef1 = checkboxValue1;
+        static bool checkboxValue2 = false; // For Subdirectories
+        bool& CheckBoxValRef2 = checkboxValue2; 
+        static bool checkboxValue3 = false; // For Renaming Folders
+        bool& CheckBoxValRef3 = checkboxValue3;
+
+        // Textbox Input Variables
+        static char text1[32] = ""; // For Current Name
+        static char text2[32] = ""; // For New Name
+        static char text4[32] = ""; // For File Extension Option
+
+        // Draw Button Variables
+        // Select Folder Button Variables
+        float button1X = 400.0f;
+        float button1Y = 280.0f;
+        float buttonWidth1 = 150.0f;
+        float buttonHeight1 = 50.0f;
+        // Rename Button Variables
+        float button2X = 225.0f;
+        float button2Y = 355.0f;
+        float buttonWidth2 = 125.0f;
+        float buttonHeight2 = 50.0f;
+
+        // Mouse Cursor Position Variables
+        double mouseX, mouseY;
+
+
+
+        //=======================
+        // Frame/Window Rendering
+        //=======================
 
         // Get framebuffer size
         int framebufferWidth, framebufferHeight;
@@ -166,97 +203,12 @@ int main() {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        //ImGui::SetNextWindowBgAlpha(0.0f); // Transparent background
-
         ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
-        //ImGui::PushStyleColor(ImGuiCol_WindowBg, clear_color); // Transparent background
 
         ImGui::PushStyleColor(ImGuiCol_FrameBg, clear_color); // Transparent background for Text Box
         ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f)); // Text Color
 
-        // Checkbox 1
-        {
-            ImGui::SetNextWindowPos(ImVec2(15, 110));
-            //ImGui::SetNextWindowSize(ImVec2(488, 40));
-            ImGui::Begin("Check", nullptr,
-                ImGuiWindowFlags_NoTitleBar |
-                ImGuiWindowFlags_NoResize |
-                ImGuiWindowFlags_NoMove |
-                ImGuiWindowFlags_NoScrollbar |
-                ImGuiWindowFlags_NoScrollWithMouse |
-                ImGuiWindowFlags_NoCollapse |
-                ImGuiWindowFlags_NoSavedSettings |
-                ImGuiWindowFlags_NoBackground
-            );
 
-            // Draw a border around the checkbox
-            ImDrawList* drawList = ImGui::GetWindowDrawList();
-            ImVec2 checkboxPos = ImGui::GetCursorScreenPos();
-            ImVec2 checkboxSize = ImVec2(ImGui::GetFontSize(), ImGui::GetFontSize());
-            ImVec2 minBound = ImVec2(checkboxPos.x - 1, checkboxPos.y - 1);
-            ImVec2 maxBound = ImVec2(checkboxPos.x + checkboxSize.x + 6, checkboxPos.y + checkboxSize.y + 6);
-            ImU32 fillColor = IM_COL32(255, 255, 255, 255); // Fill Color
-            drawList->AddRectFilled(minBound, maxBound, fillColor);
-            drawList->AddRect(minBound, maxBound, IM_COL32(0, 0, 0, 255)); // Black border
-        }
-
-            // Create a checkbox
-            static bool checkboxValue1 = false;
-            bool& CheckBoxValRef1 = checkboxValue1; // Reference to the checkbox value
-            ImGui::Checkbox("File Extension", &CheckBoxValRef1); // ##checkbox is an empty identifier to avoid label text
-
-            ImGui::End(); //End of Checkbox 1
-     
-
-        //Text Input Box 1
-        //{
-        ImGui::SetNextWindowPos(ImVec2(195, -6));
-        ImGui::SetNextWindowSize(ImVec2(310, 40));
-        ImGui::Begin(" ", nullptr,
-            ImGuiWindowFlags_NoTitleBar |
-            ImGuiWindowFlags_NoResize |
-            ImGuiWindowFlags_NoMove |
-            ImGuiWindowFlags_NoScrollbar |
-            ImGuiWindowFlags_NoScrollWithMouse |
-            ImGuiWindowFlags_NoCollapse |
-            ImGuiWindowFlags_NoSavedSettings |
-            ImGuiWindowFlags_NoBackground
-        );
-
-        // Create a text input box
-        static char text1[32] = "";
-        ImGui::InputText(" ", text1, IM_ARRAYSIZE(text1));
-
-        ImGui::End(); //End of Text box 1
-
-        //}
-
-        //Text Input Box 2
-        //{
-        ImGui::SetNextWindowPos(ImVec2(165, 29));
-        ImGui::SetNextWindowSize(ImVec2(310, 40));
-        ImGui::Begin("  ", nullptr,
-            ImGuiWindowFlags_NoTitleBar |
-            ImGuiWindowFlags_NoResize |
-            ImGuiWindowFlags_NoMove |
-            ImGuiWindowFlags_NoScrollbar |
-            ImGuiWindowFlags_NoScrollWithMouse |
-            ImGuiWindowFlags_NoCollapse |
-            ImGuiWindowFlags_NoSavedSettings |
-            ImGuiWindowFlags_NoBackground
-        );
-
-        static char text2[32] = "";
-        ImGui::InputText("  ", text2, IM_ARRAYSIZE(text2));
-
-
-        // Render the typed text without a background
-        //ImGui::TextUnformatted(text);
-        //Renders Text with Black color
-        //ImGui::TextColored(ImVec4(0.0f, 0.0f, 0.0f, 1.0f), "%s", text); 
-
-        ImGui::End(); // End the ImGui window / End of Text box 2
-        //}
 
         // NanoVG rendering
         nvgBeginFrame(vg, 600, 600, 1.0f);
@@ -267,54 +219,34 @@ int main() {
         nvgBeginPath(vg);
         nvgRect(vg, imageX, imageY, static_cast<float>(newWidth), static_cast<float>(newHeight)); // Position and size of the image rectangle
         nvgFillPaint(vg, imgPaint); // Fill the path with the image pattern
-        //nvgImagePattern(vg, 300.0f, 300.0f, static_cast<float>(imageWidth), static_cast<float>(imageHeight), 0, imageTexture, 1.0f); // Use the texture as a pattern
         nvgFill(vg);
 
-        // Draw text (old name)
-        nvgBeginPath(vg); //Starts a new path
-        nvgFontSize(vg, 20.0f);
-        nvgFontFaceId(vg, font); // Use the font ID instead of the name
-        nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-        nvgText(vg, 15.0f, 25.0f, "Enter current name:", NULL);
-
-        // Draw Box 1
-        nvgBeginPath(vg); //Starts a new path
-        nvgRect(vg, 205.0f, 4.0f, 200, 27); // Rectangle at position (100, 100) with width 200 and height 150
-        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color of the rectangle
-        nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
-        nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
-        nvgFill(vg); // Fill the path
-        nvgStroke(vg); // Draw the stroke
 
 
-        // Draw text (new name)
-        nvgBeginPath(vg); //Starts a new path
-        nvgFontSize(vg, 20.0f);
-        nvgFontFaceId(vg, font); // Use the font ID instead of the name
-        nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-        nvgText(vg, 15.0f, 60.0f, "Enter new name:", NULL);
-
-        // Draw Box 2
-        nvgBeginPath(vg); //Starts a new path
-        nvgRect(vg, 175.0f, 38.0f, 200, 28); // Rectangle at position (100, 100) with width 200 and height 150
-        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color of the rectangle
-        nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
-        nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
-        nvgFill(vg); // Fill the path
-        nvgStroke(vg); // Draw the stroke
+        // Draw Old Name Textbox (Textbox 1)
+        // Creates Input Box and Text Input for Textbox
+        ImGuiInputTextBox(195, -6, 310, 40, " ", text1);
+        // Draws Rest of Textbox Elements
+        DrawNanoVGText(vg, 15.0f, 25.0f, 20.0f, font, "Enter current name:");
+        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); //Color of the Rectangle (White)
+        DrawNanoVGTextBox(vg, 205.0f, 4.0f, 200, 27, 2.0f);
+        // End of Entire Textbox
 
 
 
-        // Draw Selection Button Variables
-        float button1X = 400.0f;
-        float button1Y = 280.0f;
-        float buttonWidth1 = 150.0f;
-        float buttonHeight1 = 50.0f;
+        // Draw New Name Textbox (Textbox 2)
+        ImGuiInputTextBox(165, 29, 310, 40, "  ", text2);
+        DrawNanoVGText(vg, 15.0f, 60.0f, 20.0f, font, "Enter new name:");
+        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
+        DrawNanoVGTextBox(vg, 175.0f, 38.0f, 200, 28, 2.0f);
+        //
+
+
+
+        // Select a Folder Button (Button 1)
 
         // Check if the mouse is over the button
-        double mouseX, mouseY;
         glfwGetCursorPos(window, &mouseX, &mouseY);
-
         isMouseOverButton = (mouseX >= button1X && mouseX <= button1X + buttonWidth1 && mouseY >= button1Y && mouseY <= button1Y + buttonHeight1);
 
         // Check if the left mouse button is pressed
@@ -338,8 +270,6 @@ int main() {
             isButtonClicked = false;
         }
 
-        std::string displayedFile = selectedFile.c_str();  // Display only the first x amount of characters
-
         // Update button color based on state
         if (isButtonClicked) {
             // Button is inactive when a file is already selected
@@ -354,30 +284,16 @@ int main() {
             nvgFillColor(vg, nvgRGBA(150, 150, 150, 255));
         }
 
+        // Draw Select a Folder Button (Button 1)
+        DrawNanoVGButton(vg, button1X, button1Y, buttonWidth1, buttonHeight1);
+        DrawNanoVGTextOnButton(vg, button1X + buttonWidth1 / 2.0f, button1Y + buttonHeight1 / 2.0f, 20.0f, font, "Select a Folder");
+        //
 
-        // Draw Button 1 (Select a Folder)
-        nvgBeginPath(vg); //Starts a new path
-        nvgRect(vg, button1X, button1Y, buttonWidth1, buttonHeight1); //Draws a rectangle
-        nvgFill(vg); //Fills the path with the current fill style
-        nvgStrokeWidth(vg, 1.0f); //Sets line width of stroke
-        nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); //Sets the color of stroke
-        nvgStroke(vg); // Makes stroke
 
-        // Draw Text on Button 1
-        nvgFontSize(vg, 18.0f);
-        nvgFontFaceId(vg, font); // Use the font ID instead of the name
-        nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-        nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE); //Aligns the text to center
-        nvgText(vg, button1X + buttonWidth1 / 2.0f, button1Y + buttonHeight1 / 2.0f, "Select a Folder", NULL);
 
-        // Draw Box 3
-        nvgBeginPath(vg); //Starts a new path
-        nvgRect(vg, 72.0f, 288.0f, 320, 33); // Rectangle at position (100, 100) with width 200 and height 150
-        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); //Color of the rectangle
-        nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
-        nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
-        nvgFill(vg); // Fill the path
-        nvgStroke(vg); // Draw the stroke
+        // Draw Select a Folder Textbox (Textbox 3)
+        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
+        DrawNanoVGTextBox(vg, 72.0f, 288.0f, 320, 33, 2.0f);
 
         //Text Input Box 3
 
@@ -401,7 +317,7 @@ int main() {
 
         // Writes File Path when file or folder is selected
         if (fileSelectedText) {
-            std::string displayedFile = selectedFile.c_str();  // Display only the first x amount of characters
+            std::string displayedFile = selectedFile.c_str();  // String to Display Selected Folder
 
             for (int i = 0; i < displayedFile.size(); i++) {
                 text3[i] = displayedFile[i];
@@ -410,238 +326,45 @@ int main() {
         }
 
         ImGui::PopFont();
+        ImGui::End(); //End of Textbox 3
 
-        ImGui::End(); //End of Text box 3
 
-        
-        // Checkbox 2 Variables
-        static bool checkboxValue2 = false;
-        bool& CheckBoxValRef2 = checkboxValue2; // Reference to the checkbox value
 
-        // Textbox 4 Variable for Checkbox 2
-        static char text4[32] = "";
+        // File Extension Checkbox (Checkbox 1)
+        ImGuiCheckBox(15, 110, CheckBoxValRef1, "Checkbox1", "File Extension");
 
-        static bool checkboxValue3 = false;
-        bool& CheckBoxValRef3 = checkboxValue3; // Reference to the checkbox value
 
-        //If statement to move Checkbox 2 (Subdirectories) if File extension directory is enabled
+
+        //If statement to move Checkbox 2 and 3 if File extension Checkbox Option is enabled
         if (CheckBoxValRef1) {
-            // Checkbox 2
-            {
-                ImGui::SetNextWindowPos(ImVec2(15, 170));
-                ImGui::Begin("Check2", nullptr,
-                    ImGuiWindowFlags_NoTitleBar |
-                    ImGuiWindowFlags_NoResize |
-                    ImGuiWindowFlags_NoMove |
-                    ImGuiWindowFlags_NoScrollbar |
-                    ImGuiWindowFlags_NoScrollWithMouse |
-                    ImGuiWindowFlags_NoCollapse |
-                    ImGuiWindowFlags_NoSavedSettings |
-                    ImGuiWindowFlags_NoBackground
-                );
-
-                // Draw a border around the checkbox
-                ImDrawList* drawList = ImGui::GetWindowDrawList();
-                ImVec2 checkboxPos = ImGui::GetCursorScreenPos();
-                ImVec2 checkboxSize = ImVec2(ImGui::GetFontSize(), ImGui::GetFontSize());
-                ImVec2 minBound = ImVec2(checkboxPos.x - 1, checkboxPos.y - 1);
-                ImVec2 maxBound = ImVec2(checkboxPos.x + checkboxSize.x + 6, checkboxPos.y + checkboxSize.y + 6);
-                ImU32 fillColor = IM_COL32(255, 255, 255, 255); // Fill Color
-                drawList->AddRectFilled(minBound, maxBound, fillColor);
-                drawList->AddRect(minBound, maxBound, IM_COL32(0, 0, 0, 255)); // Black border
-            }
-
-            // Create a checkbox 2
-            //static bool checkboxValue2 = false;
-            //bool& CheckBoxValRef2 = checkboxValue2; // Reference to the checkbox value
-            ImGui::Checkbox("Subdirectories", &CheckBoxValRef2); // ##checkbox is an empty identifier to avoid label text
-
-            ImGui::End(); //End of Checkbox 2
-
-            // Checkbox 3 (Rename Folders)
-
-            {
-                ImGui::SetNextWindowPos(ImVec2(15, 210));
-                ImGui::Begin("Check3", nullptr,
-                    ImGuiWindowFlags_NoTitleBar |
-                    ImGuiWindowFlags_NoResize |
-                    ImGuiWindowFlags_NoMove |
-                    ImGuiWindowFlags_NoScrollbar |
-                    ImGuiWindowFlags_NoScrollWithMouse |
-                    ImGuiWindowFlags_NoCollapse |
-                    ImGuiWindowFlags_NoSavedSettings |
-                    ImGuiWindowFlags_NoBackground
-                );
-
-                // Draw a border around the checkbox
-                ImDrawList* drawList = ImGui::GetWindowDrawList();
-                ImVec2 checkboxPos = ImGui::GetCursorScreenPos();
-                ImVec2 checkboxSize = ImVec2(ImGui::GetFontSize(), ImGui::GetFontSize());
-                ImVec2 minBound = ImVec2(checkboxPos.x - 1, checkboxPos.y - 1);
-                ImVec2 maxBound = ImVec2(checkboxPos.x + checkboxSize.x + 6, checkboxPos.y + checkboxSize.y + 6);
-                ImU32 fillColor = IM_COL32(255, 255, 255, 255); // Fill Color
-                drawList->AddRectFilled(minBound, maxBound, fillColor);
-                drawList->AddRect(minBound, maxBound, IM_COL32(0, 0, 0, 255)); // Black border
-            }
+            // Subdirectories Checkbox (Checkbox 2)
+            ImGuiCheckBox(15, 170, CheckBoxValRef2, "Checkbox2", "Subdirectories");
 
 
-            // Create a checkbox 3
-            //static bool checkboxValue3 = false;
-            //bool& CheckBoxValRef3 = checkboxValue3; // Reference to the checkbox value
-            ImGui::Checkbox("Rename Folders", &CheckBoxValRef3); // ##checkbox is an empty identifier to avoid label text
+            // Rename Folders Checkbox (Checkbox 3)
+            ImGuiCheckBox(15, 210, CheckBoxValRef3, "Checkbox3", "Rename Folders");
 
-            ImGui::End(); //End of Checkbox 3
 
+            // File Extension Type Textbox (Textbox 4)
             //Text Input Box 4
-            {
-                ImGui::SetNextWindowPos(ImVec2(110, 141));
-                ImGui::SetNextWindowSize(ImVec2(310, 40));
-                ImGui::Begin("    ", nullptr,
-                    ImGuiWindowFlags_NoTitleBar |
-                    ImGuiWindowFlags_NoResize |
-                    ImGuiWindowFlags_NoMove |
-                    ImGuiWindowFlags_NoScrollbar |
-                    ImGuiWindowFlags_NoScrollWithMouse |
-                    ImGuiWindowFlags_NoCollapse |
-                    ImGuiWindowFlags_NoSavedSettings |
-                    ImGuiWindowFlags_NoBackground
-                );
-
-                //static char text4[32] = "";
-                ImGui::InputText("    ", text4, IM_ARRAYSIZE(text4));
-
-                ImGui::End(); // End the ImGui window / End of Text box 4
-            }
-
-            // Draw text (File extension)
-            nvgBeginPath(vg); //Starts a new path
-            nvgFontSize(vg, 20.0f);
-            nvgFontFaceId(vg, font); // Use the font ID instead of the name
-            nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-            nvgText(vg, 70.0f, 162.0f, "File Type:", NULL);
-
-            // Draw Box 2
-            nvgBeginPath(vg); //Starts a new path
-            nvgRect(vg, 120.0f, 150.0f, 100, 28); // Rectangle at position (100, 100) with width 200 and height 150
-            nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color of the rectangle
-            nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
-            nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
-            nvgFill(vg); // Fill the path
-            nvgStroke(vg); // Draw the stroke
+            ImGuiInputTextBox(110, 141, 310, 40, "    ", text4);
+            // Draw File Extension Type Textbox (Textbox 4)
+            DrawNanoVGText(vg, 70.0f, 162.0f, 20.0f, font, "File Type:");
+            nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color of the Rectangle (White)
+            DrawNanoVGTextBox(vg, 120.0f, 150.0f, 100, 28, 2.0f);
         }
         else {
             // Checkbox 2
-            {
-                ImGui::SetNextWindowPos(ImVec2(15, 150));
-                ImGui::Begin("Check2", nullptr,
-                    ImGuiWindowFlags_NoTitleBar |
-                    ImGuiWindowFlags_NoResize |
-                    ImGuiWindowFlags_NoMove |
-                    ImGuiWindowFlags_NoScrollbar |
-                    ImGuiWindowFlags_NoScrollWithMouse |
-                    ImGuiWindowFlags_NoCollapse |
-                    ImGuiWindowFlags_NoSavedSettings |
-                    ImGuiWindowFlags_NoBackground
-                );
+            ImGuiCheckBox(15, 150, CheckBoxValRef2, "Checkbox2", "Subdirectories");
 
-                // Draw a border around the checkbox
-                ImDrawList* drawList = ImGui::GetWindowDrawList();
-                ImVec2 checkboxPos = ImGui::GetCursorScreenPos();
-                ImVec2 checkboxSize = ImVec2(ImGui::GetFontSize(), ImGui::GetFontSize());
-                ImVec2 minBound = ImVec2(checkboxPos.x - 1, checkboxPos.y - 1);
-                ImVec2 maxBound = ImVec2(checkboxPos.x + checkboxSize.x + 6, checkboxPos.y + checkboxSize.y + 6);
-                ImU32 fillColor = IM_COL32(255, 255, 255, 255); // Fill Color
-                drawList->AddRectFilled(minBound, maxBound, fillColor);
-                drawList->AddRect(minBound, maxBound, IM_COL32(0, 0, 0, 255)); // Black border
-            }
-
-            // Create a checkbox 2
-            //static bool checkboxValue2 = false;
-            //bool& CheckBoxValRef2 = checkboxValue2; // Reference to the checkbox value
-            ImGui::Checkbox("Subdirectories", &CheckBoxValRef2); // ##checkbox is an empty identifier to avoid label text
-
-            ImGui::End(); //End of Checkbox 2
 
             // Checkbox 3 (Rename Folders)
-
-            {
-                ImGui::SetNextWindowPos(ImVec2(15, 190));
-                ImGui::Begin("Check3", nullptr,
-                    ImGuiWindowFlags_NoTitleBar |
-                    ImGuiWindowFlags_NoResize |
-                    ImGuiWindowFlags_NoMove |
-                    ImGuiWindowFlags_NoScrollbar |
-                    ImGuiWindowFlags_NoScrollWithMouse |
-                    ImGuiWindowFlags_NoCollapse |
-                    ImGuiWindowFlags_NoSavedSettings |
-                    ImGuiWindowFlags_NoBackground
-                );
-
-                // Draw a border around the checkbox
-                ImDrawList* drawList = ImGui::GetWindowDrawList();
-                ImVec2 checkboxPos = ImGui::GetCursorScreenPos();
-                ImVec2 checkboxSize = ImVec2(ImGui::GetFontSize(), ImGui::GetFontSize());
-                ImVec2 minBound = ImVec2(checkboxPos.x - 1, checkboxPos.y - 1);
-                ImVec2 maxBound = ImVec2(checkboxPos.x + checkboxSize.x + 6, checkboxPos.y + checkboxSize.y + 6);
-                ImU32 fillColor = IM_COL32(255, 255, 255, 255); // Fill Color
-                drawList->AddRectFilled(minBound, maxBound, fillColor);
-                drawList->AddRect(minBound, maxBound, IM_COL32(0, 0, 0, 255)); // Black border
-            }
-
-
-            // Create a checkbox 3
-            //static bool checkboxValue3 = false;
-            //bool& CheckBoxValRef3 = checkboxValue3; // Reference to the checkbox value
-            ImGui::Checkbox("Rename Folders", &CheckBoxValRef3); // ##checkbox is an empty identifier to avoid label text
-
-            ImGui::End(); //End of Checkbox 3
+            ImGuiCheckBox(15, 190, CheckBoxValRef3, "Checkbox3", "Rename Folders");
         }
 
 
-        // Draw Rename Button Variables
-        float button2X = 225.0f;
-        float button2Y = 355.0f;
-        float buttonWidth2 = 125.0f;
-        float buttonHeight2 = 50.0f;
 
-        // Check if the mouse is over the button
-        glfwGetCursorPos(window, &mouseX, &mouseY);
-
-        isMouseOverButton2 = (mouseX >= button2X && mouseX <= button2X + buttonWidth2 && mouseY >= button2Y && mouseY <= button2Y + buttonHeight2);
-
-
-        // Update button color based on state
-        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-            // Button color when button is pressed
-            nvgFillColor(vg, nvgRGBA(0, 150, 0, 255));
-        }
-        else if (isMouseOverButton2) {
-            // Button is hovered
-            nvgFillColor(vg, nvgRGBA(0, 200, 0, 255));
-        }
-        else {
-            // Default button color
-            nvgFillColor(vg, nvgRGBA(0, 150, 0, 255));
-        }
-
-
-        // Draw Button 2 (Rename)
-        nvgBeginPath(vg); //Starts a new path
-        nvgRect(vg, button2X, button2Y, buttonWidth2, buttonHeight2); //Draws a rectangle
-        nvgFill(vg); //Fills the path with the current fill style
-        nvgStrokeWidth(vg, 1.0f); //Sets line width of stroke
-        nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); //Sets the color of stroke
-        nvgStroke(vg); // Makes stroke
-
-        // Draw Text on Button
-        nvgFontSize(vg, 24.0f);
-        nvgFontFaceId(vg, font); // Use the font ID instead of the name
-        nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-        nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE); //Aligns the text to center
-        nvgText(vg, button2X + buttonWidth2 / 2.0f, button2Y + buttonHeight2 / 2.0f, "Rename", NULL);
-
-
-        // Draw toggle switch using NanoVG
+        // Draw Toggle Switch
         DrawNanoVGToggleSwitch(vg, 21, 80, 60, 30);
 
         glfwGetCursorPos(window, &xpos, &ypos);
@@ -661,48 +384,27 @@ int main() {
 
         // Changes Word when clicking toggle switch
         if (toggleStateNVG) {
-            // Draw text (toggle switch)
-            nvgBeginPath(vg); //Starts a new path
-            nvgFontSize(vg, 20.0f);
-            nvgFontFaceId(vg, font); // Use the font ID instead of the name
-            nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-            nvgText(vg, 150.0f, 95.0f, "Entire Name", NULL);
+            DrawNanoVGText(vg, 150.0f, 95.0f, 20.0f, font, "Entire Name");
         }
         else {
-            // Draw text (toggle switch)
-            nvgBeginPath(vg); //Starts a new path
-            nvgFontSize(vg, 20.0f);
-            nvgFontFaceId(vg, font); // Use the font ID instead of the name
-            nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-            nvgText(vg, 150.0f, 95.0f, "Part of Name", NULL);
+            DrawNanoVGText(vg, 150.0f, 95.0f, 20.0f, font, "Part of Name");
         }
 
 
-        // Draw text (Files Renamed)
-        nvgBeginPath(vg); //Starts a new path
-        nvgFontSize(vg, 20.0f);
-        nvgFontFaceId(vg, font); // Use the font ID instead of the name
-        nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
-        nvgText(vg, 90.0f, 470.0f, "Files Renamed:", NULL);
 
-        // Draw Output Box 1
-        nvgBeginPath(vg); //Starts a new path
-        nvgRect(vg, 175.0f, 460.0f, 300, 130); // Rectangle at position (100, 100) with width 200 and height 150
-        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); // Color of the rectangle
-        nvgStrokeWidth(vg, 2.0f); // Set the width of the stroke to 2.0f
-        nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
-        nvgFill(vg); // Fill the path
-        nvgStroke(vg); // Draw the stroke
+        // Draw Files Renamed Output box
+        DrawNanoVGText(vg, 90.0f, 470.0f, 20.0f, font, "Files Renamed:");
+        nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
+        DrawNanoVGTextBox(vg, 175.0f, 460.0f, 300, 130, 2.0f);
 
         //Text Output Box 1 (Displays Renamed Files)
-
         ImGui::SetNextWindowPos(ImVec2(170, 458));
         ImGui::SetNextWindowSize(ImVec2(310, 134));
         ImGui::Begin("###TextWindow", nullptr,
             ImGuiWindowFlags_NoTitleBar |
             ImGuiWindowFlags_NoResize |
             ImGuiWindowFlags_NoMove |
-            //ImGuiWindowFlags_NoScrollbar |
+            ImGuiWindowFlags_NoScrollbar |
             //ImGuiWindowFlags_NoScrollWithMouse |
             ImGuiWindowFlags_NoCollapse |
             ImGuiWindowFlags_NoSavedSettings |
@@ -717,16 +419,37 @@ int main() {
             }
 
         ImGui::PopFont(); // Remove font size after text rendered
-
         ImGui::End(); //End of Text Output box 1
-         
-        //Ends the frame for NanoVG and draws the content to the screen
-        nvgEndFrame(vg);
 
-        user_convert_old = arrayToString(text1);
-        user_convert_new = arrayToString(text2);
-        user_path = arrayToString(text3);
-        user_extension = arrayToString(text4);
+
+
+        // Rename Button (Button 2)
+
+        // Check if the mouse is over the button
+        glfwGetCursorPos(window, &mouseX, &mouseY);
+        isMouseOverButton2 = (mouseX >= button2X && mouseX <= button2X + buttonWidth2 && mouseY >= button2Y && mouseY <= button2Y + buttonHeight2);
+
+        // Update button color based on state
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+            // Button color when button is pressed
+            nvgFillColor(vg, nvgRGBA(0, 150, 0, 255));
+        }
+        else if (isMouseOverButton2) {
+            // Button is hovered
+            nvgFillColor(vg, nvgRGBA(0, 200, 0, 255));
+        }
+        else {
+            // Default button color
+            nvgFillColor(vg, nvgRGBA(0, 150, 0, 255));
+        }
+
+        DrawNanoVGButton(vg, button2X, button2Y, buttonWidth2, buttonHeight2);
+        DrawNanoVGTextOnButton(vg, button2X + buttonWidth2 / 2.0f, button2Y + buttonHeight2 / 2.0f, 30.0f, font, "Rename");
+
+        ConvertOld = arrayToString(text1);
+        ConvertNew = arrayToString(text2);
+        ConvertPath = arrayToString(text3);
+        ConvertExtension = arrayToString(text4);
 
         if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
             if (isMouseOverButton2) {
@@ -735,29 +458,43 @@ int main() {
         }
         else {
             if (isMouseOverButton2 && isButtonClicked2) {
-                if (toggleStateNVG) {
+                if (ConvertOld.empty() || ConvertNew.empty()) {
+                    std::cout << "Must Enter a Current and New Name that is Valid" << std::endl;
+                }
+                else if (toggleStateNVG) {
                     if (CheckBoxValRef1) {
-                        FileRenamerFull_Ext(user_path, user_convert_old, user_convert_new, user_extension, CheckBoxValRef2, CheckBoxValRef3);
+                        FileRenamerFull_Ext(ConvertPath, ConvertOld, ConvertNew, ConvertExtension, CheckBoxValRef2, CheckBoxValRef3);
                     }
                     else {
-                        FileRenamerFull(user_path, user_convert_old, user_convert_new, CheckBoxValRef2, CheckBoxValRef3);
+                        FileRenamerFull(ConvertPath, ConvertOld, ConvertNew, CheckBoxValRef2, CheckBoxValRef3);
                     }
                 }
                 else {
                     if (CheckBoxValRef1) {
-                        FileRenamerPartial_Ext(user_path, user_convert_old, user_convert_new, user_extension, CheckBoxValRef2, CheckBoxValRef3);
+                        FileRenamerPartial_Ext(ConvertPath, ConvertOld, ConvertNew, ConvertExtension, CheckBoxValRef2, CheckBoxValRef3);
                     }
                     else {
-                        FileRenamerPartial(user_path, user_convert_old, user_convert_new, CheckBoxValRef2, CheckBoxValRef3);
+                        FileRenamerPartial(ConvertPath, ConvertOld, ConvertNew, CheckBoxValRef2, CheckBoxValRef3);
                     }
                 }
             }
             isButtonClicked2 = false;
         }
+
+
         
         ImGui::PopStyleColor(); // Restore default text color
         ImGui::PopStyleColor(); // Restore default window background color
 
+
+
+        //====================================================
+        // Ensures code in Main Loop is rendered in each frame
+        //====================================================
+
+        //Ends the frame for NanoVG and draws the content to the screen
+        nvgEndFrame(vg);
+        
         //Render ImGui
         ImGui::Render();
 
@@ -768,7 +505,6 @@ int main() {
         glfwSwapBuffers(window);
         //Handles the events like keyboard, mouse, etc.
         glfwPollEvents();
-
     }
 
 

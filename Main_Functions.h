@@ -45,7 +45,7 @@
 
 namespace fs = std::filesystem;
 std::vector <std::string> displayFilesRenamed; // Vector to store names of each renamed file to be displayed
-std::string user_convert_old, user_convert_new, user_path, user_extension; // Strings for converting character list to string
+std::string ConvertOld, ConvertNew, ConvertPath, ConvertExtension; // Strings for converting character list to string
 bool toggleStateNVG = false; // Toggle variable for toggle switch
 double xpos, ypos; // Mouse position for toggle switch
 
@@ -136,7 +136,7 @@ void FileRenamerFull(const std::string& FilePath, const std::string& old_name, c
                         fs::rename(entry.path(), new_path);
                         std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl; // Prints file name in console
 
-                        renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename; // Adds file name string to output string stream
+                        renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl; // Adds file name string to output string stream
                         displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
                     }
                     catch (const fs::filesystem_error& e) {
@@ -178,7 +178,7 @@ void FileRenamerFull(const std::string& FilePath, const std::string& old_name, c
                 fs::rename(path, new_path);
                 std::cout << "Renamed " << path << " to " << new_path << std::endl;
 
-                renamedFileString << "Renamed " << path << " to " << new_path;
+                renamedFileString << "Renamed " << path.filename() << " to " << new_filename << std::endl;
                 displayFilesRenamed.push_back(renamedFileString.str());
             }
             catch (const fs::filesystem_error& e) {
@@ -216,7 +216,7 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
                         fs::rename(entry.path(), new_path);
                         std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
 
-                        renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename << "\n";
+                        renamedFileString << "Renamed " << path.filename() << " to " << new_filename << std::endl;
                         displayFilesRenamed.push_back(renamedFileString.str());
                     }
                     catch (const fs::filesystem_error& e) {
@@ -252,7 +252,7 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
                 fs::rename(path, new_path);
                 std::cout << "Renamed " << path << " to " << new_path << std::endl;
 
-                renamedFileString << "Renamed " << path << " to " << new_path << "\n";
+                renamedFileString << "Renamed " << path.filename() << " to " << new_path.filename() << std::endl;
                 displayFilesRenamed.push_back(renamedFileString.str());
             }
             catch (const fs::filesystem_error& e) {
@@ -317,7 +317,7 @@ void FileRenamerFull_Ext(const std::string& FilePath, const std::string& old_nam
             fs::rename(path, new_path);
             std::cout << "Renamed " << path << " to " << new_path << std::endl;
 
-            renamedFileString << "Renamed " << path << " to " << new_path << "\n";
+            renamedFileString << "Renamed " << path.filename() << " to " << new_filename << std::endl;
             displayFilesRenamed.push_back(renamedFileString.str());
         }
         catch (const fs::filesystem_error& e) {
@@ -381,7 +381,7 @@ void FileRenamerPartial_Ext(const std::string& FilePath, const std::string& old_
             fs::rename(path, new_path);
             std::cout << "Renamed " << path << " to " << new_path << std::endl;
 
-            renamedFileString << "Renamed " << path << " to " << new_path << "\n";
+            renamedFileString << "Renamed " << path.filename() << " to " << new_path.filename() << std::endl;
             displayFilesRenamed.push_back(renamedFileString.str());
         }
         catch (const fs::filesystem_error& e) {
@@ -390,7 +390,6 @@ void FileRenamerPartial_Ext(const std::string& FilePath, const std::string& old_
     }
 }
 
-// Draws Toggle Switch
 void DrawNanoVGToggleSwitch(NVGcontext* vg, float x, float y, float width, float height) {
 
     if (xpos >= x && xpos <= x + width && ypos >= y && ypos <= y + height) {
@@ -415,6 +414,92 @@ void DrawNanoVGToggleSwitch(NVGcontext* vg, float x, float y, float width, float
     nvgRoundedRect(vg, handleX, y, height, height, height * 0.5f);
     nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
     nvgFill(vg);
+}
+
+void DrawNanoVGTextBox(NVGcontext* vg, float x, float y, float width, float height, float strokeWidth) {
+    nvgBeginPath(vg); //Starts a new path
+    nvgRect(vg, x, y, width, height); // Rectangle at position (100, 100) with width 200 and height 150
+    nvgStrokeWidth(vg, strokeWidth); // Set the width of the stroke to 2.0f
+    nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); // Stroke color (black)
+    nvgFill(vg); // Fill the path
+    nvgStroke(vg); // Draw the stroke
+}
+
+void DrawNanoVGText(NVGcontext* vg, float x, float y, float size, int funcFont, const char *displayText) {
+    nvgBeginPath(vg); //Starts a new path
+    nvgFontSize(vg, size);
+    nvgFontFaceId(vg, funcFont); // Use the font ID instead of the name
+    nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
+    nvgText(vg, x, y, displayText, NULL);
+}
+
+void DrawNanoVGButton(NVGcontext* vg, float x, float y, float width, float height) {
+    nvgBeginPath(vg); //Starts a new path
+    nvgRect(vg, x, y, width, height); //Draws a rectangle
+    nvgFill(vg); //Fills the path with the current fill style
+    nvgStrokeWidth(vg, 1.0f); //Sets line width of stroke
+    nvgStrokeColor(vg, nvgRGBA(0, 0, 0, 255)); //Sets the color of stroke
+    nvgStroke(vg); // Makes stroke
+}
+
+void DrawNanoVGTextOnButton(NVGcontext* vg, float x, float y, float size, int funcFont, const char* displayText) {
+    nvgBeginPath(vg); //Starts a new path
+    nvgFontSize(vg, size);
+    nvgFontFaceId(vg, funcFont); // Use the font ID instead of the name
+    nvgFillColor(vg, nvgRGBA(0, 0, 0, 255));
+    nvgTextAlign(vg, NVG_ALIGN_CENTER | NVG_ALIGN_MIDDLE); //Aligns the text to center
+    nvgText(vg, x, y, displayText, NULL);
+}
+
+void ImGuiCheckBox(float x, float y, bool& CheckboxValue, const char *CheckboxID, const char *CheckboxLabel) {
+    ImGui::SetNextWindowPos(ImVec2(x,y));
+    ImGui::Begin(CheckboxID, nullptr,
+        ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoScrollWithMouse |
+        ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoSavedSettings |
+        ImGuiWindowFlags_NoBackground
+    );
+
+    // Draw a border around the checkbox
+    ImDrawList* drawList = ImGui::GetWindowDrawList();
+    ImVec2 checkboxPos = ImGui::GetCursorScreenPos();
+    ImVec2 checkboxSize = ImVec2(ImGui::GetFontSize(), ImGui::GetFontSize());
+    ImVec2 minBound = ImVec2(checkboxPos.x - 1, checkboxPos.y - 1);
+    ImVec2 maxBound = ImVec2(checkboxPos.x + checkboxSize.x + 6, checkboxPos.y + checkboxSize.y + 6);
+    ImU32 fillColor = IM_COL32(255, 255, 255, 255); // Fill Color
+    drawList->AddRectFilled(minBound, maxBound, fillColor);
+    drawList->AddRect(minBound, maxBound, IM_COL32(0, 0, 0, 255)); // Black border
+
+    // Create a checkbox Variable containing Checkbox Value
+    static bool checkboxValue1 = false;
+    bool& CheckBoxValRef1 = checkboxValue1; // Reference to the checkbox value
+    ImGui::Checkbox(CheckboxLabel, &CheckboxValue); // ##checkbox is an empty identifier to avoid label text
+
+    ImGui::End(); //End of Checkbox 1
+}
+
+template <std::size_t arr_size>
+void ImGuiInputTextBox(float x, float y, float width, float height, const char* InputBoxID, char(&text)[arr_size]) {
+    ImGui::SetNextWindowPos(ImVec2(x, y));
+    ImGui::SetNextWindowSize(ImVec2(width, height));
+    ImGui::Begin(InputBoxID, nullptr,
+        ImGuiWindowFlags_NoTitleBar |
+        ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoScrollbar |
+        ImGuiWindowFlags_NoScrollWithMouse |
+        ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoSavedSettings |
+        ImGuiWindowFlags_NoBackground
+    );
+
+    // Create Text Variable to gather text input for input Box
+    ImGui::InputText(InputBoxID, text, arr_size);
+    ImGui::End(); // End of Input Box
 }
 
 void onExit() {
