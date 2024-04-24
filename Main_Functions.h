@@ -51,7 +51,6 @@ double xpos, ypos; // Mouse position for toggle switch
 
 
 
-
 //===============
 // Main Functions
 //===============
@@ -132,12 +131,17 @@ void FileRenamerFull(const std::string& FilePath, const std::string& old_name, c
                     // Full path for the new file
                     auto new_path = entry.path().parent_path() / new_filename;
 
-                    // Rename the file
-                    fs::rename(entry.path(), new_path);
-                    std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl; // Prints file name in console
+                    try {
+                        // Rename the file
+                        fs::rename(entry.path(), new_path);
+                        std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl; // Prints file name in console
 
-                    renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename; // Adds file name string to output string stream
-                    displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
+                        renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename; // Adds file name string to output string stream
+                        displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
+                    }
+                    catch (const fs::filesystem_error& e) {
+                        std::cerr << "Failed to rename " << entry.path() << " to " << new_filename << ": " << e.what() << std::endl;
+                    }
                 }
 
             }
@@ -173,6 +177,9 @@ void FileRenamerFull(const std::string& FilePath, const std::string& old_name, c
             try {
                 fs::rename(path, new_path);
                 std::cout << "Renamed " << path << " to " << new_path << std::endl;
+
+                renamedFileString << "Renamed " << path << " to " << new_path;
+                displayFilesRenamed.push_back(renamedFileString.str());
             }
             catch (const fs::filesystem_error& e) {
                 std::cerr << "Failed to rename " << path << " to " << new_path << ": " << e.what() << std::endl;
@@ -204,12 +211,17 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
                     // Full path for the new file
                     auto new_path = entry.path().parent_path() / new_filename;
 
-                    // Rename the file
-                    fs::rename(entry.path(), new_path);
-                    std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
+                    try {
+                        // Rename the file
+                        fs::rename(entry.path(), new_path);
+                        std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
 
-                    renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename << "\n"; // Adds file name string to output string stream
-                    displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
+                        renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename << "\n";
+                        displayFilesRenamed.push_back(renamedFileString.str());
+                    }
+                    catch (const fs::filesystem_error& e) {
+                        std::cerr << "Failed to rename " << entry.path() << " to " << new_filename << ": " << e.what() << std::endl;
+                    }
                 }
             }
         }
@@ -239,6 +251,9 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
             try {
                 fs::rename(path, new_path);
                 std::cout << "Renamed " << path << " to " << new_path << std::endl;
+
+                renamedFileString << "Renamed " << path << " to " << new_path << "\n";
+                displayFilesRenamed.push_back(renamedFileString.str());
             }
             catch (const fs::filesystem_error& e) {
                 std::cerr << "Failed to rename " << path << " to " << new_path << ": " << e.what() << std::endl;
@@ -252,6 +267,7 @@ void FileRenamerFull_Ext(const std::string& FilePath, const std::string& old_nam
     fs::path target_directory = FilePath;
     std::vector<fs::path> paths;
     std::string normalized_ext = (ext.front() == '.') ? ext : "." + ext; // Ensure the extension starts with a dot.
+    std::ostringstream renamedFileString;
 
     // Step 1: Collect Paths
     if (subDir) {
@@ -300,6 +316,9 @@ void FileRenamerFull_Ext(const std::string& FilePath, const std::string& old_nam
         try {
             fs::rename(path, new_path);
             std::cout << "Renamed " << path << " to " << new_path << std::endl;
+
+            renamedFileString << "Renamed " << path << " to " << new_path << "\n";
+            displayFilesRenamed.push_back(renamedFileString.str());
         }
         catch (const fs::filesystem_error& e) {
             std::cerr << "Failed to rename " << path << " to " << new_path << ": " << e.what() << std::endl;
@@ -312,6 +331,7 @@ void FileRenamerPartial_Ext(const std::string& FilePath, const std::string& old_
     fs::path target_directory = FilePath;
     std::vector<fs::path> paths;
     std::string normalized_ext = (ext.front() == '.') ? ext : "." + ext; // Ensure the extension starts with a dot.
+    std::ostringstream renamedFileString;
 
     // Step 1: Collect Paths
     if (subDir) {
@@ -360,6 +380,9 @@ void FileRenamerPartial_Ext(const std::string& FilePath, const std::string& old_
         try {
             fs::rename(path, new_path);
             std::cout << "Renamed " << path << " to " << new_path << std::endl;
+
+            renamedFileString << "Renamed " << path << " to " << new_path << "\n";
+            displayFilesRenamed.push_back(renamedFileString.str());
         }
         catch (const fs::filesystem_error& e) {
             std::cerr << "Failed to rename " << path << " to " << new_path << ": " << e.what() << std::endl;
@@ -395,7 +418,12 @@ void DrawNanoVGToggleSwitch(NVGcontext* vg, float x, float y, float width, float
 }
 
 void onExit() {
-    std::cout << "Application Exited." << std::endl;
+    try {
+        std::cout << "Application Exited." << std::endl;
+    }
+    catch (const fs::filesystem_error& e) {
+        std::cerr << "Error Upon Exiting Application" << ": " << e.what() << std::endl;
+    }
 }
 
 #endif Main_Functions
