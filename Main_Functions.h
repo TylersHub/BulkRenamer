@@ -216,7 +216,7 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
                         fs::rename(entry.path(), new_path);
                         std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
 
-                        renamedFileString << "Renamed " << path.filename() << " to " << new_filename << std::endl;
+                        renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
                         displayFilesRenamed.push_back(renamedFileString.str());
                     }
                     catch (const fs::filesystem_error& e) {
