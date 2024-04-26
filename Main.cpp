@@ -171,12 +171,12 @@ int main() {
 
         // Draw Button Variables
         // Select Folder Button Variables
-        float button1X = 400.0f;
+        float button1X = 388.0f;
         float button1Y = 280.0f;
         float buttonWidth1 = 150.0f;
         float buttonHeight1 = 50.0f;
         // Rename Button Variables
-        float button2X = 225.0f;
+        float button2X = 238.0f;
         float button2Y = 355.0f;
         float buttonWidth2 = 125.0f;
         float buttonHeight2 = 50.0f;
@@ -293,11 +293,11 @@ int main() {
 
         // Draw Select a Folder Textbox (Textbox 3)
         nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
-        DrawNanoVGTextBox(vg, 72.0f, 288.0f, 320, 33, 2.0f);
+        DrawNanoVGTextBox(vg, 60.0f, 288.0f, 320, 33, 2.0f);
 
         //Text Input Box 3
 
-        ImGui::SetNextWindowPos(ImVec2(66, 283));
+        ImGui::SetNextWindowPos(ImVec2(54, 283));
         ImGui::SetNextWindowSize(ImVec2(488, 40));
         ImGui::Begin("   ", nullptr,
             ImGuiWindowFlags_NoTitleBar |
@@ -393,13 +393,13 @@ int main() {
 
 
         // Draw Files Renamed Output box
-        DrawNanoVGText(vg, 90.0f, 470.0f, 20.0f, font, "Files Renamed:");
+        //DrawNanoVGText(vg, 70.0f, 440.0f, 20.0f, font, "Files Renamed:");
         nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
-        DrawNanoVGTextBox(vg, 175.0f, 460.0f, 300, 130, 2.0f);
+        DrawNanoVGTextBox(vg, 105.0f, 420.0f, 380, 170, 2.0f);
 
         //Text Output Box 1 (Displays Renamed Files)
-        ImGui::SetNextWindowPos(ImVec2(170, 458));
-        ImGui::SetNextWindowSize(ImVec2(310, 134));
+        ImGui::SetNextWindowPos(ImVec2(105, 420));
+        ImGui::SetNextWindowSize(ImVec2(380, 170));
         ImGui::Begin("###TextWindow", nullptr,
             ImGuiWindowFlags_NoTitleBar |
             ImGuiWindowFlags_NoResize |

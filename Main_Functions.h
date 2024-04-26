@@ -118,6 +118,8 @@ void FileRenamerFull(const std::string& FilePath, const std::string& old_name, c
         for (const auto& entry : fs::directory_iterator(target_directory)) {
             //if (!entry.is_regular_file()) continue; // Skip if not a regular file
 
+            renamedFileString.str("");
+
             if (includeFolders ? (entry.is_regular_file() || entry.is_directory()) : entry.is_regular_file()) {
                 // Extract the filename without the extension
                 std::string filename_without_extension = entry.path().stem().string();
@@ -134,13 +136,13 @@ void FileRenamerFull(const std::string& FilePath, const std::string& old_name, c
                     try {
                         // Rename the file
                         fs::rename(entry.path(), new_path);
-                        std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl; // Prints file name in console
+                        std::cout << "Renamed " << entry.path().filename() << " to " << new_path.filename() << std::endl; // Prints file name in console
 
-                        renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl; // Adds file name string to output string stream
+                        renamedFileString << "Renamed " << entry.path().filename() << " to " << new_path.filename() << std::endl; // Adds file name string to output string stream
                         displayFilesRenamed.push_back(renamedFileString.str()); // Adds file name string to vector for display
                     }
                     catch (const fs::filesystem_error& e) {
-                        std::cerr << "Failed to rename " << entry.path() << " to " << new_filename << ": " << e.what() << std::endl;
+                        std::cerr << "Failed to rename " << entry.path() << " to " << new_path.filename() << ": " << e.what() << std::endl;
                     }
                 }
 
@@ -169,6 +171,7 @@ void FileRenamerFull(const std::string& FilePath, const std::string& old_name, c
         // Step 3: Rename
         for (const auto& path : paths) {
             // Determine new path
+            renamedFileString.str("");
             auto new_filename = path.filename().replace_extension().string() == old_name ?
                 path.filename().replace_extension().string().replace(0, old_name.length(), new_name) + path.extension().string() :
                 path.filename().string();
@@ -178,11 +181,11 @@ void FileRenamerFull(const std::string& FilePath, const std::string& old_name, c
                 fs::rename(path, new_path);
                 std::cout << "Renamed " << path << " to " << new_path << std::endl;
 
-                renamedFileString << "Renamed " << path.filename() << " to " << new_filename << std::endl;
+                renamedFileString << "Renamed " << path.filename() << " to " << new_path.filename() << std::endl;
                 displayFilesRenamed.push_back(renamedFileString.str());
             }
             catch (const fs::filesystem_error& e) {
-                std::cerr << "Failed to rename " << path << " to " << new_path << ": " << e.what() << std::endl;
+                std::cerr << "Failed to rename " << path << " to " << new_path.filename() << ": " << e.what() << std::endl;
             }
         }
     }
@@ -195,8 +198,7 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
 
     if (!subDir) {
         for (const auto& entry : fs::directory_iterator(target_directory)) {
-
-            //if (!entry.is_regular_file()) continue; // Skip if not a regular file
+            renamedFileString.str("");
 
             if (includeFolders ? (entry.is_regular_file() || entry.is_directory()) : entry.is_regular_file()) {
                 // Extract the complete filename
@@ -214,13 +216,13 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
                     try {
                         // Rename the file
                         fs::rename(entry.path(), new_path);
-                        std::cout << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
+                        std::cout << "Renamed " << entry.path().filename() << " to " << new_path.filename() << std::endl;
 
-                        renamedFileString << "Renamed " << entry.path().filename() << " to " << new_filename << std::endl;
+                        renamedFileString << "Renamed " << entry.path().filename() << " to " << new_path.filename() << std::endl;
                         displayFilesRenamed.push_back(renamedFileString.str());
                     }
                     catch (const fs::filesystem_error& e) {
-                        std::cerr << "Failed to rename " << entry.path() << " to " << new_filename << ": " << e.what() << std::endl;
+                        std::cerr << "Failed to rename " << entry.path() << " to " << new_path.filename() << ": " << e.what() << std::endl;
                     }
                 }
             }
@@ -247,6 +249,7 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
 
         // Step 3: Rename
         for (const auto& path : paths) {
+            renamedFileString.str("");
             auto new_path = path.parent_path() / path.filename().string().replace(path.filename().string().find(old_name), old_name.length(), new_name);
             try {
                 fs::rename(path, new_path);
@@ -256,7 +259,7 @@ void FileRenamerPartial(const std::string& FilePath, const std::string& old_name
                 displayFilesRenamed.push_back(renamedFileString.str());
             }
             catch (const fs::filesystem_error& e) {
-                std::cerr << "Failed to rename " << path << " to " << new_path << ": " << e.what() << std::endl;
+                std::cerr << "Failed to rename " << path << " to " << new_path.filename() << ": " << e.what() << std::endl;
             }
         }
     }
@@ -317,11 +320,11 @@ void FileRenamerFull_Ext(const std::string& FilePath, const std::string& old_nam
             fs::rename(path, new_path);
             std::cout << "Renamed " << path << " to " << new_path << std::endl;
 
-            renamedFileString << "Renamed " << path.filename() << " to " << new_filename << std::endl;
+            renamedFileString << "Renamed " << path.filename() << " to " << new_path.filename() << std::endl;
             displayFilesRenamed.push_back(renamedFileString.str());
         }
         catch (const fs::filesystem_error& e) {
-            std::cerr << "Failed to rename " << path << " to " << new_path << ": " << e.what() << std::endl;
+            std::cerr << "Failed to rename " << path << " to " << new_path.filename() << ": " << e.what() << std::endl;
         }
     }
 }
@@ -385,7 +388,7 @@ void FileRenamerPartial_Ext(const std::string& FilePath, const std::string& old_
             displayFilesRenamed.push_back(renamedFileString.str());
         }
         catch (const fs::filesystem_error& e) {
-            std::cerr << "Failed to rename " << path << " to " << new_path << ": " << e.what() << std::endl;
+            std::cerr << "Failed to rename " << path << " to " << new_path.filename() << ": " << e.what() << std::endl;
         }
     }
 }
