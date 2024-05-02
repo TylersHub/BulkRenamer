@@ -1,5 +1,4 @@
 #include "Main_Functions.h"
-#include "Shaders.h"
 
 int main() {
 
@@ -319,7 +318,7 @@ int main() {
         if (fileSelectedText) {
             std::string displayedFile = selectedFile.c_str();  // String to Display Selected Folder
 
-            for (int i = 0; i < displayedFile.size(); i++) {
+            for (size_t i = 0; i < displayedFile.size(); i++) {
                 text3[i] = displayedFile[i];
             }
 
@@ -532,6 +531,8 @@ int main() {
     glfwTerminate();
 
     std::atexit(onExit);
-    
+
+    std::cout << "Press Enter to close...";
+    std::cin.get();  // Waits for Enter key
     return 0;
 }

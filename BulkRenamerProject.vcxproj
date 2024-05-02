@@ -71,12 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\callo\source\repos\NanoVG_OpenGL_TextRender\Libraries\include;C:\Users\callo\Desktop\CODING\C++\NanoVG\nanovg-master\src;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\callo\Desktop\CODING\C++\OpenGL\glfw-3.3.9\include;C:\Users\callo\source\repos\BulkRenamerProject\Libraries\include;C:\Users\callo\Desktop\CODING\C++\NanoVG\nanovg-master\src;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0\stage\lib;C:\Users\callo\source\repos\BulkRenamerProject\Libraries\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\callo\source\repos\NanoVG_OpenGL_TextRender\Libraries\include;C:\Users\callo\Desktop\CODING\C++\NanoVG\nanovg-master\src;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\callo\Desktop\CODING\C++\OpenGL\glfw-3.3.9\include;C:\Users\callo\source\repos\BulkRenamerProject\Libraries\include;C:\Users\callo\Desktop\CODING\C++\NanoVG\nanovg-master\src;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0\stage\lib;C:\Users\callo\source\repos\BulkRenamerProject\Libraries\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>C:\Users\callo\Desktop\CODING\C++\OpenGL\glfw-3.3.9_static\include\GLFW;C:\Users\callo\source\repos\BulkRenamerProject\Libraries\include;C:\Users\callo\Desktop\CODING\C++\NanoVG\nanovg-master\src;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0\stage\lib;C:\Users\callo\source\repos\BulkRenamerProject\Libraries\lib;C:\Users\callo\Desktop\CODING\C++\OpenGL\glfw-3.4.bin.WIN32\lib-vc2022;C:\Users\callo\Desktop\CODING\C++\FreeType\ft2132_static_release\freetype-2.13.2\objs\Win32\Release Static;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\Users\callo\Desktop\CODING\C++\OpenGL\glfw-3.3.9_static\include\GLFW;C:\Users\callo\source\repos\BulkRenamerProject\Libraries\include;C:\Users\callo\Desktop\CODING\C++\NanoVG\nanovg-master\src;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0\stage\lib;C:\Users\callo\source\repos\BulkRenamerProject\Libraries\lib;C:\Users\callo\Desktop\CODING\C++\FreeType\ft2132_static_release\freetype-2.13.2\objs\x64\Release Static;C:\Users\callo\Desktop\CODING\C++\ImGui\glfw-3.3.9 - Copy_static\src\Release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -86,6 +94,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\callo\Desktop\CODING\C++\OpenGL\tinyfiledialogs-current\tinyfiledialogs;C:\Users\callo\Desktop\CODING\C++\OpenGL;C:\Users\callo\Desktop\CODING\C++\OpenGL\glad\include;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0\boost;C:\Users\callo\Desktop\CODING\C++\OpenGLMathematics(glm)\glm;C:\Users\callo\Desktop\CODING\C++\FreeType\freetype-2.13.2\include;C:\Users\callo\Desktop\CODING\C++\OpenGL\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -95,8 +104,8 @@
       <AdditionalManifestDependencies>%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)New_BulkRenamer_Logo.ico" "$(TargetDir)"
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -105,15 +114,30 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Users\callo\Desktop\CODING\C++\OpenGL\tinyfiledialogs-current\tinyfiledialogs;C:\Users\callo\Desktop\CODING\C++\OpenGL;C:\Users\callo\Desktop\CODING\C++\OpenGL\glad\include;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0\boost;C:\Users\callo\Desktop\CODING\C++\OpenGLMathematics(glm)\glm;C:\Users\callo\Desktop\CODING\C++\FreeType\freetype-2.13.2\include;C:\Users\callo\Desktop\CODING\C++\OpenGL\imgui;C:\Users\callo\Desktop\CODING\C++\OpenGL\glfw-3.3.9_static\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <OmitFramePointers />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\callo\Desktop\CODING\C++\OpenGL\tinyfiledialogs-current\tinyfiledialogs\dll_cs_lua_R_fortran_pascal;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0\libs;C:\Users\callo\Desktop\CODING\C++\OpenGL\glfw-3.4.bin.WIN32\lib-vc2022;C:\Users\callo\Desktop\CODING\C++\FreeType\ft2132_static_release\freetype-2.13.2\objs\Win32\Release Static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>tinyfiledialogs64.lib;opengl32.lib;glfw3.lib;user32.lib;gdi32.lib;shell32.lib;freetype.lib;libboost_filesystem-vc143-mt-gd-x64-1_84.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/VERBOSE %(AdditionalOptions)</AdditionalOptions>
+      <ImageHasSafeExceptionHandlers />
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -123,6 +147,7 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\callo\Desktop\CODING\C++\OpenGL\tinyfiledialogs-current\tinyfiledialogs;C:\Users\callo\Desktop\CODING\C++\OpenGL;C:\Users\callo\Desktop\CODING\C++\OpenGL\glad\include;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0\boost;C:\Users\callo\Desktop\CODING\C++\OpenGLMathematics(glm)\glm;C:\Users\callo\Desktop\CODING\C++\FreeType\freetype-2.13.2\include;C:\Users\callo\Desktop\CODING\C++\OpenGL\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,8 +157,8 @@
       <AdditionalManifestDependencies>%(AdditionalManifestDependencies)</AdditionalManifestDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)New_BulkRenamer_Logo.ico" "$(TargetDir)"
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,15 +167,28 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_STATIC</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Users\callo\Desktop\CODING\C++\OpenGL\tinyfiledialogs-current\tinyfiledialogs;C:\Users\callo\Desktop\CODING\C++\OpenGL;C:\Users\callo\Desktop\CODING\C++\OpenGL\glad\include;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0\boost;C:\Users\callo\Desktop\CODING\C++\OpenGLMathematics(glm)\glm;C:\Users\callo\Desktop\CODING\C++\FreeType\freetype-2.13.2\include;C:\Users\callo\Desktop\CODING\C++\OpenGL\imgui;C:\Users\callo\Desktop\CODING\C++\OpenGL\glfw-3.3.9_static\include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\callo\Desktop\CODING\C++\OpenGL\tinyfiledialogs-current\tinyfiledialogs\dll_cs_lua_R_fortran_pascal;C:\Users\callo\Desktop\CODING\C++\Boost Libraries\boost_1_84_0\libs;C:\Users\callo\Desktop\CODING\C++\ImGui\glfw-3.3.9 - Copy_static\src\Release;C:\Users\callo\Desktop\CODING\C++\FreeType\ft2132_static_release\freetype-2.13.2\objs\x64\Release Static;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>tinyfiledialogs64.lib;opengl32.lib;glfw3.lib;user32.lib;gdi32.lib;shell32.lib;freetype.lib;libboost_filesystem-vc143-mt-gd-x64-1_84.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/VERBOSE %(AdditionalOptions)</AdditionalOptions>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Desktop\CODING\C++\NanoVG\nanovg-master\src\nanovg.c" />

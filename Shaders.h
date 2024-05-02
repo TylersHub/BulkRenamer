@@ -21,8 +21,7 @@ void initFreeType() {
         exit(-1);
     }
 
-    if (FT_New_Face(ft, "trebuc.ttf", 0, &face)) {
-        fprintf(stderr, "Failed to load font\n");
+    if (FT_New_Face(ft, "C:/Users/callo/source/repos/BulkRenamerProject/trebuc.ttf", 0, &face)) {
         FT_Done_FreeType(ft); // Cleanup FreeType on failure
         glfwTerminate();
         exit(-1);
