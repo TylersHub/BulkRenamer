@@ -36,6 +36,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <regex>
+#include "resource.h"
 #include "Shaders.h"
 
 //==========

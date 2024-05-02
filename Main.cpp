@@ -119,8 +119,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     glfwSetWindowSizeLimits(window, 600, 600, 600, 600); //Sets the minimum and maximum size of the window to 600x600
 
+    HMODULE hModule = GetModuleHandle(NULL);
+    HRSRC hResource = FindResource(hModule, MAKEINTRESOURCE(IDB_PNG1), "PNG");
+    HGLOBAL hMemory = LoadResource(hModule, hResource);
+    DWORD size = SizeofResource(hModule, hResource);
+    void* pData = LockResource(hMemory);
+
+    if (pData == NULL) {
+        MessageBox(NULL, "Could not locate PNG resource.", "Error", MB_OK);
+        return -1;
+    }
+
+    int width, height, channels;
+    unsigned char* decodedImage = stbi_load_from_memory((unsigned char*)pData, size, &width, &height, &channels, 4);
+    if (!decodedImage) {
+        MessageBox(NULL, "Failed to decode PNG.", "Error", MB_OK);
+        return -1;
+    }
+
     // Load Image
-    int imageHandle = nvgCreateImage(vg, "New_BulkRenamer_Logo_Background.png", 0);
+    //int imageHandle = nvgCreateImage(vg, "New_BulkRenamer_Logo_Background.png", 0);
+    int imageHandle = nvgCreateImageRGBA(vg, width, height, 0, decodedImage);
+    stbi_image_free(decodedImage);
     nvgImageSize(vg, imageHandle, &imageWidth, &imageHeight);
     float newWidth = 1.5f * static_cast<float>(imageWidth);
     float newHeight = 1.5f * static_cast<float>(imageHeight);
@@ -511,6 +531,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     //========
     // Cleanup
     //========
+
+    FreeResource(hMemory);
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
