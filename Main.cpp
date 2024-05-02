@@ -1,6 +1,6 @@
 #include "Main_Functions.h"
 
-int main() {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
     //==========
     // Variables
