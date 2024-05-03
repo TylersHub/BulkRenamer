@@ -13,6 +13,13 @@ FT_Face face; // FreeType font face variable
 
 glm::mat4 projectionMatrix;
 
+// Load the font from the embedded font resource
+HMODULE hMod = GetModuleHandle(NULL);
+HRSRC hRes = FindResource(hMod, MAKEINTRESOURCE(IDR_FONT1), RT_FONT);
+HGLOBAL hMem = LoadResource(hMod, hRes);
+DWORD font_Size = SizeofResource(hMod, hRes);
+unsigned char* data = (unsigned char*)LockResource(hMem);
+
 // Function to initialize FreeType
 void initFreeType() {
     if (FT_Init_FreeType(&ft)) {
@@ -21,7 +28,7 @@ void initFreeType() {
         exit(-1);
     }
 
-    if (FT_New_Face(ft, "C:/Users/callo/source/repos/BulkRenamerProject/trebuc.ttf", 0, &face)) {
+    if (FT_New_Memory_Face(ft, data, font_Size, 0, &face)) {
         FT_Done_FreeType(ft); // Cleanup FreeType on failure
         glfwTerminate();
         exit(-1);

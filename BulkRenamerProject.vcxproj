@@ -221,7 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="calibri-regular.ttf" />
-    <Font Include="trebuc.ttf" />
+    <Font Include="Arial.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="New_BulkRenamer_Logo.ico" />

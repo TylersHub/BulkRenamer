@@ -33,7 +33,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
     FT_Face face;
-    if (FT_New_Face(ft, "trebuc.ttf", 0, &face)) {
+    if (FT_New_Memory_Face(ft, data, font_Size, 0, &face)) {
         fprintf(stderr, "Failed to load font\n");
         return -1;
     }
@@ -99,6 +99,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.IniFilename = NULL; //Disable ini file from being generated
 
     // Setup Platform/Renderer bindings
     const char* glsl_version = "#version 130";
@@ -108,10 +109,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // NanoVG initialization
     NVGcontext* vg = nvgCreateGL3(NVG_ANTIALIAS | NVG_STENCIL_STROKES | NVG_DEBUG);
 
-    // Load the font
-    int font = nvgCreateFont(vg, "Trebuche", "trebuc.ttf");
+    int font = nvgCreateFontMem(vg, "embedded", data, font_Size, 0);
     if (font == -1) {
-        fprintf(stderr, "Failed to load font\n");
+        MessageBox(NULL, "Could not load embedded font.", "Error", MB_OK);
         return -1;
     }
 
@@ -122,7 +122,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     HMODULE hModule = GetModuleHandle(NULL);
     HRSRC hResource = FindResource(hModule, MAKEINTRESOURCE(IDB_PNG1), "PNG");
     HGLOBAL hMemory = LoadResource(hModule, hResource);
-    DWORD size = SizeofResource(hModule, hResource);
+    DWORD image_Size = SizeofResource(hModule, hResource);
     void* pData = LockResource(hMemory);
 
     if (pData == NULL) {
@@ -131,7 +131,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
     int width, height, channels;
-    unsigned char* decodedImage = stbi_load_from_memory((unsigned char*)pData, size, &width, &height, &channels, 4);
+    unsigned char* decodedImage = stbi_load_from_memory((unsigned char*)pData, image_Size, &width, &height, &channels, 4);
     if (!decodedImage) {
         MessageBox(NULL, "Failed to decode PNG.", "Error", MB_OK);
         return -1;
@@ -156,9 +156,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     std::cout << " " << newWidth << " " << newHeight << "\n";
 
     //io.FontGlobalScale = 1.0f; // Change this value to adjust global font size
-    ImFont* ImGui_font_normal = io.Fonts->AddFontFromFileTTF("trebuc.ttf", 24.0f); // Load the font file with a font size of x points
-    ImFont* ImGui_font_small = io.Fonts->AddFontFromFileTTF("trebuc.ttf", 20.0f); // Load the font file with a font size thats smaller
-    ImFont* ImGui_font_extra_small = io.Fonts->AddFontFromFileTTF("trebuc.ttf", 16.0f);
+    ImFont* ImGui_font_normal = io.Fonts->AddFontFromMemoryTTF(data, font_Size, 24.0f); // Load the font file with a font size of x points
+    ImFont* ImGui_font_small = io.Fonts->AddFontFromMemoryTTF(data, font_Size, 20.0f); // Load the font file with a font size thats smaller
+    ImFont* ImGui_font_extra_small = io.Fonts->AddFontFromMemoryTTF(data, font_Size, 16.0f);
 
     // Set the font as the default font for ImGui
     io.FontDefault = ImGui_font_normal;
@@ -246,7 +246,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         // Creates Input Box and Text Input for Textbox
         ImGuiInputTextBox(195, -6, 310, 40, " ", text1);
         // Draws Rest of Textbox Elements
-        DrawNanoVGText(vg, 15.0f, 25.0f, 20.0f, font, "Enter current name:");
+        DrawNanoVGText(vg, 15.0f, 25.0f, 20.5f, font, "Enter current name:");
         nvgFillColor(vg, nvgRGBA(255, 255, 255, 255)); //Color of the Rectangle (White)
         DrawNanoVGTextBox(vg, 205.0f, 4.0f, 200, 27, 2.0f);
         // End of Entire Textbox
@@ -255,7 +255,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         // Draw New Name Textbox (Textbox 2)
         ImGuiInputTextBox(165, 29, 310, 40, "  ", text2);
-        DrawNanoVGText(vg, 15.0f, 60.0f, 20.0f, font, "Enter new name:");
+        DrawNanoVGText(vg, 15.0f, 60.0f, 20.5f, font, "Enter new name:");
         nvgFillColor(vg, nvgRGBA(255, 255, 255, 255));
         DrawNanoVGTextBox(vg, 175.0f, 38.0f, 200, 28, 2.0f);
         //

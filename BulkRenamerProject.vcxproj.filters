@@ -103,8 +103,8 @@
     <Font Include="calibri-regular.ttf">
       <Filter>Source Files</Filter>
     </Font>
-    <Font Include="trebuc.ttf">
-      <Filter>Source Files</Filter>
+    <Font Include="Arial.ttf">
+      <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>
   <ItemGroup>
