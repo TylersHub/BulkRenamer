@@ -70,7 +70,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     glfwWindowHint(GLFW_SAMPLES, 0);
 
     // Load the dialog icon (in window)
-   HICON hIcon = (HICON)LoadImage(NULL, TEXT("New_BulkRenamer_Logo.ico"), IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED);
+    //HICON hIcon = (HICON)LoadImage(NULL, TEXT("New_BulkRenamer_Logo.ico"), IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED);
+    HMODULE hIconModule = GetModuleHandle(NULL);
+    HICON hIcon = LoadIcon(hIconModule, MAKEINTRESOURCE(IDI_ICON1));
     if (hIcon)
     {
 
@@ -533,6 +535,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     //========
 
     FreeResource(hMemory);
+    FreeResource(hMem);
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
