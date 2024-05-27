@@ -6,7 +6,7 @@ This project is licensed under a custom license. Please see the [LICENSE](LICENS
 
 ### Attribution
 
-This software includes code developed by [Tyler Rosa]. (https://github.com/TylersHub)
+This software includes code developed by [Tyler Rosa](https://github.com/TylersHub).
 
 ## Download
 
