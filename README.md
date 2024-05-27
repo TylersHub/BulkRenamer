@@ -34,4 +34,4 @@ This software includes code developed by [Tyler Rosa](https://github.com/TylersH
 
 You can download the latest version of the application from the [Releases](https://github.com/TylersHub/BulkRenamer/releases) page.
 
-[Download the latest version](https://github.com/TylersHub/BulkRenamer/tree/Changed-Subsystem-from-Console-to-Windows/x64/Release/BulkRenamer_v2.2.2.exe)
+[Download the latest version](https://github.com/TylersHub/BulkRenamer/releases/download/v2.2.2/BulkRenamer_Release_x64.exe)
