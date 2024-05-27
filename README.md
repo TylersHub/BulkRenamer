@@ -1,4 +1,5 @@
-# BulkRenamerProject ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎‎‎![New_BulkRenamer_Logo_256x](https://github.com/TylersHub/BulkRenamer/assets/125721050/96903f9b-8d73-40f2-8aaa-2e622680c8c0)
+‎‎‎![New_BulkRenamer_Logo_256x](https://github.com/TylersHub/BulkRenamer/assets/125721050/96903f9b-8d73-40f2-8aaa-2e622680c8c0)
+# BulkRenamer
 
 BulkRenamer is a Windows tool that allows you to rename multiple files at once. To use the tool, enter the current name of the file(s) and then enter the new name that will replace it. Next, choose the directory in which the files are located. There are different settings available, the most important being whether the current name refers to the entire file name or only part of the file name. Other settings include choosing the file type, deciding whether to apply renaming to only the current directory or all child directories, and including the option to rename folders with the same name.
 
