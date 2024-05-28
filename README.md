@@ -31,7 +31,11 @@ This project is licensed under a custom license. Please see the [LICENSE](LICENS
 
 This software includes code developed by [Tyler Rosa](https://github.com/TylersHub).
 
-## Download
+## Important Notice about Building the Solution/Project in Visual Studio
+
+Please note that not all required files to build the solution or project are present in this repository. Some essential files, such as certain OpenGL libraries, need to be added separately. Ensure that you download and include these files in your project directory to guarantee proper functionality.
+
+# Download
 
 You can download the latest version of the application from the [Releases](https://github.com/TylersHub/BulkRenamer/releases) page.
 
